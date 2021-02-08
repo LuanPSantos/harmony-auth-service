@@ -8,7 +8,7 @@ public class Password {
         this.value = value;
     }
 
-    public void checkMatches(String password) throws Exception {
+    public void checkIfMatches(String password) throws Exception {
         if(password.matches(password) == false) {
             throw new Exception("Senha inválida");
         }
