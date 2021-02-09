@@ -16,7 +16,7 @@ public class AuthorizationService {
 
     public String authorize(JWTAuthorization authorization) throws Exception {
 
-        checkIfIsExpired(authorization);
+        checkIfAuthorizationIsExpired(authorization);
         Subject subject = authorization.getSubject();
         checkIfUserExists(subject.getUsername());
 
@@ -27,7 +27,7 @@ public class AuthorizationService {
         userService.findByEmail(email);
     }
 
-    private void checkIfIsExpired(JWTAuthorization authorization) throws Exception {
+    private void checkIfAuthorizationIsExpired(JWTAuthorization authorization) throws Exception {
         if (authorization.isExpired()) {
             throw new Exception("Token Expirado!");
         }
