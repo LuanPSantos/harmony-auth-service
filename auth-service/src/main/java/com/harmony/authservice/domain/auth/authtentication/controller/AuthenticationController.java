@@ -1,8 +1,8 @@
-package com.harmony.authservice.domain.authtentication.controller;
+package com.harmony.authservice.domain.auth.authtentication.controller;
 
-import com.harmony.authservice.domain.authtentication.controller.request.AuthenticationRequest;
-import com.harmony.authservice.domain.authtentication.controller.response.AuthenticationResponse;
-import com.harmony.authservice.domain.authtentication.service.AuthenticationService;
+import com.harmony.authservice.domain.auth.authtentication.controller.request.AuthenticationRequest;
+import com.harmony.authservice.domain.auth.authtentication.controller.response.AuthenticationResponse;
+import com.harmony.authservice.domain.auth.authtentication.service.AuthenticationService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("authentications")
 public class AuthenticationController {
 
-    private AuthenticationService authenticationService;
+    private final AuthenticationService authenticationService;
 
     public AuthenticationController(AuthenticationService authenticationService) {
         this.authenticationService = authenticationService;

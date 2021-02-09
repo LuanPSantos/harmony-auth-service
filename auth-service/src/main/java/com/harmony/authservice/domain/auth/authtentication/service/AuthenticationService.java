@@ -1,6 +1,7 @@
-package com.harmony.authservice.domain.authtentication.service;
+package com.harmony.authservice.domain.auth.authtentication.service;
 
-import com.harmony.authservice.common.jwt.JWTUtils;
+import com.harmony.authservice.domain.auth.model.JWTAuthorization;
+import com.harmony.authservice.domain.auth.model.Subject;
 import com.harmony.authservice.domain.userregistration.model.User;
 import com.harmony.authservice.domain.userregistration.service.UserService;
 import org.springframework.stereotype.Service;
@@ -19,6 +20,7 @@ public class AuthenticationService {
 
         user.getPassword().checkIfMatches(password);
 
-        return JWTUtils.generateAuthorization(user.getEmail());
+        Subject subject = new Subject(user.getEmail(), user.getRole());
+        return new JWTAuthorization(subject).getToken();
     }
 }
