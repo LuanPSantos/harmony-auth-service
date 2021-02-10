@@ -1,4 +1,4 @@
-package com.harmony.authservice.domain.auth.authtentication.service;
+package com.harmony.authservice.domain.auth.authentication.service;
 
 import com.harmony.authservice.domain.auth.model.JWTAuthorization;
 import com.harmony.authservice.domain.auth.model.Subject;

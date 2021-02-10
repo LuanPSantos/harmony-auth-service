@@ -1,4 +1,4 @@
-package com.harmony.authservice.domain.auth.authtentication.controller.request;
+package com.harmony.authservice.domain.auth.authentication.controller.request;
 
 public class AuthenticationRequest {
 
