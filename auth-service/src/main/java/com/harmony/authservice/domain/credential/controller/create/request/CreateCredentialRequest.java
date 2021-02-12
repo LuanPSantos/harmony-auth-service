@@ -1,4 +1,4 @@
-package com.harmony.userregistration.credential.controller.create.request;
+package com.harmony.authservice.domain.credential.controller.create.request;
 
 import javax.validation.constraints.NotBlank;
 

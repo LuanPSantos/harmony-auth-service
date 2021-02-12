@@ -1,4 +1,4 @@
-package com.harmony.userregistration.credential.controller.read.response;
+package com.harmony.authservice.domain.credential.controller.read.response;
 
 public class FindCredentialByEmailResponse {
 

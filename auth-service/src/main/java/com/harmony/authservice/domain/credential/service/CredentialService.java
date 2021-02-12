@@ -1,12 +1,15 @@
-package com.harmony.userregistration.credential.service;
+package com.harmony.authservice.domain.credential.service;
 
-import com.harmony.userregistration.credential.model.Credential;
-import com.harmony.userregistration.credential.model.Email;
-import com.harmony.userregistration.credential.repository.CredentialRepository;
+import com.harmony.authservice.domain.credential.model.Credential;
+import com.harmony.authservice.domain.credential.model.Email;
+import com.harmony.authservice.domain.credential.repository.CredentialRepository;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 @Service
-public class CredentialService {
+public class CredentialService implements UserDetailsService {
 
     private final CredentialRepository credentialRepository;
 
@@ -20,13 +23,18 @@ public class CredentialService {
                 .orElseThrow(() -> new Exception("Credenciais não encontradas."));
     }
 
-    public Credential findByEmail(String email) throws Exception {
+    public Credential findByEmail(String email) throws UsernameNotFoundException {
         return credentialRepository
                 .findByEmail(new Email(email))
-                .orElseThrow(() -> new Exception("Credentiais não encontradas por email"));
+                .orElseThrow(() -> new UsernameNotFoundException("Credentiais não encontradas por email"));
     }
 
     public Credential save(Credential credential) {
         return credentialRepository.save(credential);
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return findByEmail(username);
     }
 }

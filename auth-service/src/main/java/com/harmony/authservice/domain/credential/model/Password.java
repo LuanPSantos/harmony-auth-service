@@ -1,4 +1,4 @@
-package com.harmony.userregistration.credential.model;
+package com.harmony.authservice.domain.credential.model;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;

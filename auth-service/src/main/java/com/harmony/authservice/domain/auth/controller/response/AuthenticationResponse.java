@@ -1,4 +1,4 @@
-package com.harmony.authservice.domain.auth.authentication.controller.response;
+package com.harmony.authservice.domain.auth.controller.response;
 
 public class AuthenticationResponse {
 

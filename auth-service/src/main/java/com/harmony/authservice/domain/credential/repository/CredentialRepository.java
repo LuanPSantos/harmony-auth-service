@@ -1,7 +1,7 @@
-package com.harmony.userregistration.credential.repository;
+package com.harmony.authservice.domain.credential.repository;
 
-import com.harmony.userregistration.credential.model.Credential;
-import com.harmony.userregistration.credential.model.Email;
+import com.harmony.authservice.domain.credential.model.Credential;
+import com.harmony.authservice.domain.credential.model.Email;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 

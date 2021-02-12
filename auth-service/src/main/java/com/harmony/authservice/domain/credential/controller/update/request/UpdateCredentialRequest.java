@@ -1,4 +1,4 @@
-package com.harmony.userregistration.credential.controller.update.request;
+package com.harmony.authservice.domain.credential.controller.update.request;
 
 public class UpdateCredentialRequest {
 

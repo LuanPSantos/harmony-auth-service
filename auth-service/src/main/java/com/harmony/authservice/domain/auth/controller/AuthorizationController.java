@@ -1,10 +1,11 @@
-package com.harmony.authservice.domain.auth.authorization.controller;
+package com.harmony.authservice.domain.auth.controller;
 
-import com.harmony.authservice.domain.auth.authorization.service.AuthorizationService;
+import com.harmony.authservice.domain.auth.controller.request.AuthorizationRequest;
+import com.harmony.authservice.domain.auth.controller.response.AuthorizationResponse;
 import com.harmony.authservice.domain.auth.model.JWTAuthorization;
-import org.springframework.http.ResponseEntity;
+import com.harmony.authservice.domain.auth.service.AuthService;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -12,16 +13,20 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("authorizations")
 public class AuthorizationController {
 
-    private final AuthorizationService authorizationService;
+    private final AuthService authService;
 
-    public AuthorizationController(AuthorizationService authorizationService) {
-        this.authorizationService = authorizationService;
+    public AuthorizationController(AuthService authService) {
+        this.authService = authService;
     }
 
     @GetMapping
-    public ResponseEntity<Void> authorize(@RequestHeader("Authorization") String authorization) throws Exception {
-        String newAuthorizationToken = authorizationService.authorize(new JWTAuthorization(authorization));
+    public AuthorizationResponse authorize(@RequestBody AuthorizationRequest request) throws Exception {
+        JWTAuthorization jwtAuthorization = new JWTAuthorization(request.getAuthorization());
 
-        return ResponseEntity.ok().header("Authorization", newAuthorizationToken).build();
+        String authorization = authService
+                .authorize(jwtAuthorization.getSubject().getUsername())
+                .getToken();
+
+        return new AuthorizationResponse(authorization);
     }
 }

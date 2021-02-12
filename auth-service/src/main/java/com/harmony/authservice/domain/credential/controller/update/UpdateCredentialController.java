@@ -1,12 +1,12 @@
-package com.harmony.userregistration.credential.controller.update;
+package com.harmony.authservice.domain.credential.controller.update;
 
-import com.harmony.userregistration.credential.controller.update.request.UpdateCredentialRequest;
-import com.harmony.userregistration.credential.service.update.UpdateCredentialService;
+import com.harmony.authservice.domain.credential.controller.update.request.UpdateCredentialRequest;
+import com.harmony.authservice.domain.credential.service.update.UpdateCredentialService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("users/credentials")
+@RequestMapping("auths/credentials")
 public class UpdateCredentialController {
 
     private final UpdateCredentialService updateCredentialService;

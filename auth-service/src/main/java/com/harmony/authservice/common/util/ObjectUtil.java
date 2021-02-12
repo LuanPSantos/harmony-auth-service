@@ -1,4 +1,4 @@
-package com.harmony.userregistration.common.util;
+package com.harmony.authservice.common.util;
 
 public class ObjectUtil {
 

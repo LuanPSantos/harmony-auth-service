@@ -1,10 +1,15 @@
-package com.harmony.userregistration.credential.model;
+package com.harmony.authservice.domain.credential.model;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Objects;
 
 @Entity
-public class Credential {
+public class Credential implements UserDetails {
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
@@ -26,17 +31,9 @@ public class Credential {
         return id;
     }
 
-    public Email getEmail() {
-        return email;
-    }
-
     public Credential setEmail(Email email) {
         this.email = email;
         return this;
-    }
-
-    public Password getPassword() {
-        return password;
     }
 
     public Credential setPassword(Password password) {
@@ -48,6 +45,40 @@ public class Credential {
         if (email.getValue().contains(password.getValue())) {
             throw new Exception("A senha não pode conter a senha");
         }
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return Collections.emptyList();
+    }
+
+    public String getPassword() {
+        return password.getValue();
+    }
+
+    @Override
+    public String getUsername() {
+        return email.getValue();
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 
     @Override

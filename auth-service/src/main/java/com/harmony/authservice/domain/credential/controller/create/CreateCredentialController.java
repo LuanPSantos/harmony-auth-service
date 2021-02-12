@@ -1,8 +1,8 @@
-package com.harmony.userregistration.credential.controller.create;
+package com.harmony.authservice.domain.credential.controller.create;
 
-import com.harmony.userregistration.credential.controller.create.request.CreateCredentialRequest;
-import com.harmony.userregistration.credential.model.Credential;
-import com.harmony.userregistration.credential.service.create.CreateCredentialService;
+import com.harmony.authservice.domain.credential.controller.create.request.CreateCredentialRequest;
+import com.harmony.authservice.domain.credential.model.Credential;
+import com.harmony.authservice.domain.credential.service.create.CreateCredentialService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -14,7 +14,7 @@ import javax.validation.Valid;
 import java.net.URI;
 
 @RestController
-@RequestMapping("users/credentials")
+@RequestMapping("auths/credentials")
 public class CreateCredentialController {
 
     private final CreateCredentialService createCredentialService;

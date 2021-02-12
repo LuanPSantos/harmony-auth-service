@@ -1,13 +1,13 @@
-package com.harmony.userregistration.credential.controller.read;
+package com.harmony.authservice.domain.credential.controller.read;
 
-import com.harmony.userregistration.credential.controller.read.response.FindCredentialByEmailResponse;
-import com.harmony.userregistration.credential.model.Credential;
-import com.harmony.userregistration.credential.service.CredentialService;
+import com.harmony.authservice.domain.credential.controller.read.response.FindCredentialByEmailResponse;
+import com.harmony.authservice.domain.credential.model.Credential;
+import com.harmony.authservice.domain.credential.service.CredentialService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("users/credentials")
+@RequestMapping("auths/credentials")
 public class ReadCredentialController {
 
     private final CredentialService credentialService;
@@ -21,6 +21,6 @@ public class ReadCredentialController {
     public FindCredentialByEmailResponse findByEmail(@RequestParam("email") String email) throws Exception {
         Credential credential = credentialService.findByEmail(email);
 
-        return new FindCredentialByEmailResponse(credential.getEmail().getValue(), credential.getPassword().getValue());
+        return new FindCredentialByEmailResponse(credential.getUsername(), credential.getPassword());
     }
 }
