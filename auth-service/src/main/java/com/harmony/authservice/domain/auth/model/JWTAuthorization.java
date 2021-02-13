@@ -1,8 +1,6 @@
 package com.harmony.authservice.domain.auth.model;
 
-import com.harmony.authservice.common.jwt.JWTUtils;
-
-import java.util.Date;
+import com.harmony.authservice.common.jwt.JWTToken;
 
 public class JWTAuthorization {
 
@@ -19,24 +17,22 @@ public class JWTAuthorization {
     }
 
     public static JWTAuthorization withAuthorizationToken(String authorizationToken) {
-        return new JWTAuthorization(removingPrefix(authorizationToken));
+        String token = removingPrefix(authorizationToken);
+
+        JWTToken.checkTokenSignature(token);
+
+        return new JWTAuthorization(token);
     }
 
-    public boolean isValid() {
-        return JWTUtils.isValid(authorization) && isNotExpired();
+    public boolean isExpired() {
+        return JWTToken.isExpired(authorization);
     }
 
     public String getSubject() {
         if (authorization != null) {
-            return JWTUtils.extractSubjectFromJwtToken(authorization);
+            return JWTToken.extractSubjectFromJwtToken(authorization);
         }
         return null;
-    }
-
-    private boolean isNotExpired() {
-        Date expiration = extractExpirationFromAuthorization();
-
-        return expiration.before(new Date());
     }
 
     public String getToken() {
@@ -44,15 +40,7 @@ public class JWTAuthorization {
     }
 
     private static String generateAuthorization(String subject) {
-        return JWTUtils.generateJwtToken(subject);
-    }
-
-    private Date extractExpirationFromAuthorization() {
-        if (authorization != null) {
-            return JWTUtils.extractExpirationFromJwtToken(authorization);
-        }
-
-        throw new IllegalStateException("Token de authorization null");
+        return JWTToken.generateJwtToken(subject);
     }
 
     private static String removingPrefix(String token) {
