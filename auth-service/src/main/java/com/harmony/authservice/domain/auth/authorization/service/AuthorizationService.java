@@ -1,7 +1,6 @@
 package com.harmony.authservice.domain.auth.authorization.service;
 
 import com.harmony.authservice.domain.auth.model.JWTAuthorization;
-import com.harmony.authservice.domain.auth.model.Subject;
 import com.harmony.authservice.domain.userregistration.service.UserService;
 import org.springframework.stereotype.Service;
 
@@ -14,22 +13,23 @@ public class AuthorizationService {
         this.userService = userService;
     }
 
-    public String authorize(JWTAuthorization authorization) throws Exception {
+    public JWTAuthorization authorize(JWTAuthorization authorization) throws Exception {
 
-        checkIfAuthorizationIsExpired(authorization);
-        Subject subject = authorization.getSubject();
-        checkIfUserExists(subject.getUsername());
+        checkIfAuthorizationIsValid(authorization);
+        checkIfUserExists(authorization.getSubject());
 
-        return new JWTAuthorization(subject).getToken();
+        return authorization;
     }
 
     private void checkIfUserExists(String email) {
         userService.findByEmail(email);
     }
 
-    private void checkIfAuthorizationIsExpired(JWTAuthorization authorization) throws Exception {
-        if (authorization.isExpired()) {
-            throw new Exception("Token Expirado!");
+
+
+    private void checkIfAuthorizationIsValid(JWTAuthorization authorization) throws Exception {
+        if(!authorization.isValid()) {
+            throw new Exception("Autorização invalida");
         }
     }
 }

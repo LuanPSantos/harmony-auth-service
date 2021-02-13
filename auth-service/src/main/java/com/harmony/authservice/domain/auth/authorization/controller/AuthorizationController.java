@@ -1,12 +1,12 @@
 package com.harmony.authservice.domain.auth.authorization.controller;
 
+import com.harmony.authservice.domain.auth.authorization.controller.request.AuthorizationRequest;
+import com.harmony.authservice.domain.auth.authorization.controller.response.AuthorizationResponse;
 import com.harmony.authservice.domain.auth.authorization.service.AuthorizationService;
 import com.harmony.authservice.domain.auth.model.JWTAuthorization;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import static com.harmony.authservice.domain.auth.model.JWTAuthorization.withAuthorizationToken;
 
 @RestController
 @RequestMapping("authorizations")
@@ -19,9 +19,10 @@ public class AuthorizationController {
     }
 
     @GetMapping
-    public ResponseEntity<Void> authorize(@RequestHeader("Authorization") String authorization) throws Exception {
-        String newAuthorizationToken = authorizationService.authorize(new JWTAuthorization(authorization));
+    public AuthorizationResponse authorize(@RequestBody AuthorizationRequest request) throws Exception {
+        JWTAuthorization jwtAuthorization = authorizationService
+                .authorize(withAuthorizationToken(request.getAuthorizationToken()));
 
-        return ResponseEntity.ok().header("Authorization", newAuthorizationToken).build();
+        return new AuthorizationResponse(jwtAuthorization.getToken());
     }
 }

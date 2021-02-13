@@ -1,57 +1,62 @@
 package com.harmony.authservice.domain.auth.model;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.harmony.authservice.common.jwt.JWTUtils;
 
 import java.util.Date;
 
 public class JWTAuthorization {
 
-    private static final String AUTHORIZATION_BEARER_PREFIX = "Bearer";
+    private static final String AUTHORIZATION_BEARER_PREFIX = "Bearer ";
 
-    private final ObjectMapper mapper = new ObjectMapper();
+    private final String authorization;
 
-    private final String value;
-
-    public JWTAuthorization(Subject subject) throws JsonProcessingException {
-
-        this.value = generateAuthorization(mapper.writeValueAsString(subject));
+    private JWTAuthorization(String authorization) {
+        this.authorization = authorization;
     }
 
-    public JWTAuthorization(String jwtAuthorization) {
-        value = jwtAuthorization;
+    public static JWTAuthorization withSubject(String subject) {
+        return new JWTAuthorization(generateAuthorization(subject));
     }
 
-    public Subject getSubject() throws JsonProcessingException {
-        if (value != null) {
-            String subjectInJson = JWTUtils.extractSubjectFromJwtToken(value.replace(AUTHORIZATION_BEARER_PREFIX, ""));
-            return mapper.readValue(subjectInJson, Subject.class);
+    public static JWTAuthorization withAuthorizationToken(String authorizationToken) {
+        return new JWTAuthorization(removingPrefix(authorizationToken));
+    }
+
+    public boolean isValid() {
+        return JWTUtils.isValid(authorization) && isNotExpired();
+    }
+
+    public String getSubject() {
+        if (authorization != null) {
+            return JWTUtils.extractSubjectFromJwtToken(authorization);
         }
         return null;
     }
 
-    public boolean isExpired() {
-        Date expiration = extractExpirationFromAuthorization(value);
+    private boolean isNotExpired() {
+        Date expiration = extractExpirationFromAuthorization();
 
         return expiration.before(new Date());
     }
 
     public String getToken() {
-        return value;
+        return AUTHORIZATION_BEARER_PREFIX + authorization;
     }
 
-    private String generateAuthorization(String subject) {
-        String jwt = JWTUtils.generateJwtToken(subject);
-
-        return AUTHORIZATION_BEARER_PREFIX + " " + jwt;
+    private static String generateAuthorization(String subject) {
+        return JWTUtils.generateJwtToken(subject);
     }
 
-    private Date extractExpirationFromAuthorization(String authorization) {
+    private Date extractExpirationFromAuthorization() {
         if (authorization != null) {
-            return JWTUtils.extractExpirationFromJwtToken(authorization.replace(AUTHORIZATION_BEARER_PREFIX, ""));
+            return JWTUtils.extractExpirationFromJwtToken(authorization);
         }
 
         throw new IllegalStateException("Token de authorization null");
     }
+
+    private static String removingPrefix(String token) {
+        return token.replace(AUTHORIZATION_BEARER_PREFIX, "");
+    }
+
 }

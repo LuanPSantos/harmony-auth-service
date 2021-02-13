@@ -2,13 +2,16 @@ package com.harmony.authservice.domain.auth.authentication.controller.response;
 
 public class AuthenticationResponse {
 
-    private String token;
+    private String authorizationToken;
 
-    public AuthenticationResponse(String token) {
-        this.token = token;
+    public AuthenticationResponse() {
     }
 
-    public String getToken() {
-        return token;
+    public AuthenticationResponse(String authorizationToken) {
+        this.authorizationToken = authorizationToken;
+    }
+
+    public String getAuthorizationToken() {
+        return authorizationToken;
     }
 }
