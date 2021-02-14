@@ -4,6 +4,7 @@ import com.harmony.authservice.common.jwt.JWTToken;
 
 public class JWTAuthorization {
 
+    public static final Long REFRESH_TOKEN_EXPIRATION_TIME = 120_000L;
     private static final String AUTHORIZATION_BEARER_PREFIX = "Bearer ";
 
     private final String authorization;
@@ -16,16 +17,16 @@ public class JWTAuthorization {
         return new JWTAuthorization(generateAuthorization(subject));
     }
 
-    public static JWTAuthorization withAuthorizationToken(String authorizationToken) {
+    public static JWTAuthorization withSubjectAndExpirationTime(String subject, Long expirationTime) {
+        return new JWTAuthorization(generateAuthorization(subject, expirationTime));
+    }
+
+    public static JWTAuthorization validateAndCreateFromToken(String authorizationToken) {
         String token = removingPrefix(authorizationToken);
 
         JWTToken.checkTokenSignature(token);
 
         return new JWTAuthorization(token);
-    }
-
-    public boolean isExpired() {
-        return JWTToken.isExpired(authorization);
     }
 
     public String getSubject() {
@@ -41,6 +42,10 @@ public class JWTAuthorization {
 
     private static String generateAuthorization(String subject) {
         return JWTToken.generateJwtToken(subject);
+    }
+
+    private static String generateAuthorization(String subject, Long expirationTime) {
+        return JWTToken.generateJwtToken(subject, expirationTime);
     }
 
     private static String removingPrefix(String token) {

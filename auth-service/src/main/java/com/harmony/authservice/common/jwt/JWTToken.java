@@ -14,9 +14,13 @@ public class JWTToken {
     static final String SECRET = "MySecret";
 
     public static String generateJwtToken(String subject) {
+        return generateJwtToken(subject, EXPIRATION_TIME_IN_MILLIS_SEC);
+    }
+
+    public static String generateJwtToken(String subject, Long expirationTime) {
         return Jwts.builder()
                 .setSubject(subject)
-                .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME_IN_MILLIS_SEC))
+                .setExpiration(new Date(System.currentTimeMillis() + expirationTime))
                 .signWith(SignatureAlgorithm.HS512, getEncodedSecret())
                 .compact();
     }
@@ -25,12 +29,6 @@ public class JWTToken {
         return getClaims(token)
                 .getBody()
                 .getSubject();
-    }
-
-    public static boolean isExpired(String token) {
-        Jws<Claims> claims = getClaims(token);
-
-        return new Date().after(claims.getBody().getExpiration());
     }
 
     public static void checkTokenSignature(String token) {
