@@ -17,7 +17,7 @@ public class AuthorizationController {
     }
 
     @GetMapping
-    public AuthorizationResponse authorize(@RequestBody AuthorizationRequest request) throws Exception {
+    public AuthorizationResponse authorize(@RequestBody AuthorizationRequest request){
         JWTAuthorization jwtAuthorization = authorizationService
                 .authorize(request.getAuthorizationToken(),request.getRefreshAuthorizationToken());
 

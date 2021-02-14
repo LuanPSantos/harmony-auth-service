@@ -1,6 +1,6 @@
-package com.harmony.authservice.domain.userregistration.client.response;
+package com.harmony.authservice.domain.credential.controller.update.request;
 
-public class UserCredentialResponse {
+public class UpdateCredentialRequest {
 
     private String email;
     private String password;

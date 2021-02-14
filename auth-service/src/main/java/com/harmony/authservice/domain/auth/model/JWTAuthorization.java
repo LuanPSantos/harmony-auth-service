@@ -21,7 +21,7 @@ public class JWTAuthorization {
         return new JWTAuthorization(generateAuthorization(subject, expirationTime));
     }
 
-    public static JWTAuthorization validateAndCreateFromToken(String authorizationToken) {
+    public static JWTAuthorization validateAuthorizationToken(String authorizationToken) {
         String token = removingPrefix(authorizationToken);
 
         JWTToken.checkTokenSignature(token);
