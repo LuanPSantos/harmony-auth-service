@@ -13,13 +13,20 @@ public class Credential {
     private Email email;
     @Embedded
     private Password password;
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
     public Credential() {
     }
 
-    public Credential(String email, String password) {
+    public Credential(String email, String password, Role role) {
         this.email = new Email(email);
         this.password = new Password(password);
+        this.role = role;
+    }
+
+    public Role getRole() {
+        return role;
     }
 
     public Long getId() {

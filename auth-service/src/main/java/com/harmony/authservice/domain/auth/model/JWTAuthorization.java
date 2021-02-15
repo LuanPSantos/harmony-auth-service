@@ -1,11 +1,16 @@
 package com.harmony.authservice.domain.auth.model;
 
-import com.harmony.authservice.common.jwt.JWTToken;
+import com.harmony.authservice.common.jwt.JWTTokens;
+import com.harmony.authservice.domain.credential.model.Role;
+
+import java.util.AbstractMap.SimpleEntry;
+import java.util.Map;
 
 public class JWTAuthorization {
 
     public static final Long REFRESH_TOKEN_EXPIRATION_TIME = 120_000L;
     private static final String AUTHORIZATION_BEARER_PREFIX = "Bearer ";
+    private static final String ROLE_FIELD = "role";
 
     private final String authorization;
 
@@ -13,25 +18,32 @@ public class JWTAuthorization {
         this.authorization = authorization;
     }
 
-    public static JWTAuthorization withSubject(String subject) {
-        return new JWTAuthorization(generateAuthorization(subject));
+    public static JWTAuthorization withEmailAndRole(String subject, Role role) {
+        return new JWTAuthorization(generateAuthorization(subject, role));
     }
 
-    public static JWTAuthorization withSubjectAndExpirationTime(String subject, Long expirationTime) {
-        return new JWTAuthorization(generateAuthorization(subject, expirationTime));
+    public static JWTAuthorization withEmailAndExpirationTimeAndRole(String subject, Long expirationTime, Role role) {
+        return new JWTAuthorization(generateAuthorization(subject, expirationTime, role));
     }
 
     public static JWTAuthorization validateAuthorizationToken(String authorizationToken) {
         String token = removingPrefix(authorizationToken);
 
-        JWTToken.checkTokenSignature(token);
+        JWTTokens.checkTokenSignature(token);
 
         return new JWTAuthorization(token);
     }
 
     public String getSubject() {
         if (authorization != null) {
-            return JWTToken.extractSubjectFromJwtToken(authorization);
+            return JWTTokens.extractSubjectFromJwtToken(authorization);
+        }
+        return null;
+    }
+
+    public Role getRole() {
+        if (authorization != null) {
+            return Role.valueOf(JWTTokens.extractCustomFieldFromJwtToken(authorization, ROLE_FIELD));
         }
         return null;
     }
@@ -40,12 +52,12 @@ public class JWTAuthorization {
         return AUTHORIZATION_BEARER_PREFIX + authorization;
     }
 
-    private static String generateAuthorization(String subject) {
-        return JWTToken.generateJwtToken(subject);
+    private static String generateAuthorization(String subject, Role role) {
+        return JWTTokens.generateJwtToken(subject, new SimpleEntry<>(ROLE_FIELD, role));
     }
 
-    private static String generateAuthorization(String subject, Long expirationTime) {
-        return JWTToken.generateJwtToken(subject, expirationTime);
+    private static String generateAuthorization(String subject, Long expirationTime, Role role) {
+        return JWTTokens.generateJwtToken(subject, expirationTime, new SimpleEntry<>(ROLE_FIELD, role));
     }
 
     private static String removingPrefix(String token) {

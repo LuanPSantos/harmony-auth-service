@@ -3,6 +3,7 @@ package com.harmony.authservice.domain.auth.authorization.controller;
 import com.harmony.authservice.domain.auth.authorization.controller.request.AuthorizationRequest;
 import com.harmony.authservice.domain.auth.authorization.controller.response.AuthorizationResponse;
 import com.harmony.authservice.domain.auth.authorization.service.AuthorizationService;
+import com.harmony.authservice.domain.auth.exception.ForbiddenException;
 import com.harmony.authservice.domain.auth.model.JWTAuthorization;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,9 +18,12 @@ public class AuthorizationController {
     }
 
     @GetMapping
-    public AuthorizationResponse authorize(@RequestBody AuthorizationRequest request){
+    public AuthorizationResponse authorize(@RequestBody AuthorizationRequest request) throws ForbiddenException {
         JWTAuthorization jwtAuthorization = authorizationService
-                .authorize(request.getAuthorizationToken(),request.getRefreshAuthorizationToken());
+                .authorize(
+                        request.getAuthorizationToken(),
+                        request.getRefreshAuthorizationToken(),
+                        request.getRoleRequiredByEndpoint());
 
         return new AuthorizationResponse(jwtAuthorization.getToken());
     }

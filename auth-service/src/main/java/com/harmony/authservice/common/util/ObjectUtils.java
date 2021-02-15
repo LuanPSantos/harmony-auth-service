@@ -1,6 +1,6 @@
 package com.harmony.authservice.common.util;
 
-public class ObjectUtil {
+public class ObjectUtils {
 
     public static <T> T notNullOrDefault(T value, T defaultValue) {
         if (value == null) {

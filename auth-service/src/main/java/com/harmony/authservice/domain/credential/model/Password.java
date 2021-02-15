@@ -28,8 +28,7 @@ public class Password {
     }
 
     public boolean matches(String rawPassword) {
-        // TODO entender o que tá acontecendo que não da match!
-        return passwordEncoder.matches(value, rawPassword);
+        return passwordEncoder.matches(rawPassword, value);
     }
 
     @Override

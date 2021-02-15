@@ -2,6 +2,7 @@ package com.harmony.authservice.domain.credential.controller.create;
 
 import com.harmony.authservice.domain.credential.controller.create.request.CreateCredentialRequest;
 import com.harmony.authservice.domain.credential.model.Credential;
+import com.harmony.authservice.domain.credential.model.Role;
 import com.harmony.authservice.domain.credential.service.create.CreateCredentialService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,7 +28,8 @@ public class CreateCredentialController {
     public ResponseEntity<Void> create(@RequestBody @Valid CreateCredentialRequest request) throws Exception {
         Credential credential = createCredentialService.create(
                 request.getEmail(),
-                request.getPassword()
+                request.getPassword(),
+                request.getRole()
         );
 
         URI uri = ServletUriComponentsBuilder
