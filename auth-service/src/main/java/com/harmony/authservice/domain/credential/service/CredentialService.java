@@ -30,4 +30,8 @@ public class CredentialService {
     public Credential save(Credential credential) {
         return credentialRepository.save(credential);
     }
+
+    public void deleteById(Long id) {
+        credentialRepository.deleteById(id);
+    }
 }
