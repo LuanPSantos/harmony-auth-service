@@ -13,7 +13,6 @@ public class DeleteCredentialService {
     }
 
     public void deleteById(Long id) {
-        throw new RuntimeException();
-        //credentialService.deleteById(id);
+        credentialService.deleteById(id);
     }
 }

@@ -5,7 +5,13 @@ import com.harmony.authservice.domain.auth.authorization.controller.response.Aut
 import com.harmony.authservice.domain.auth.authorization.service.AuthorizationService;
 import com.harmony.authservice.domain.auth.exception.ForbiddenException;
 import com.harmony.authservice.domain.auth.model.JWTAuthorization;
+import com.harmony.authservice.domain.credential.model.Role;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import static com.harmony.authservice.domain.auth.model.JWTAuthorizationTokenPair.REFRESH_AUTHENTICATION_COOKIE_KEY;
 
 @RestController
 @RequestMapping("authorizations")
@@ -17,14 +23,24 @@ public class AuthorizationController {
         this.authorizationService = authorizationService;
     }
 
-    @GetMapping
-    public AuthorizationResponse authorize(@RequestBody AuthorizationRequest request) throws ForbiddenException {
+    @PostMapping
+    public ResponseEntity<Void> authorize(
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationToken,
+            @RequestParam("required-role") Role role,
+            @CookieValue(REFRESH_AUTHENTICATION_COOKIE_KEY) String refreshAuthentication) throws ForbiddenException {
+
+        System.out.println("Tentando autorizar");
         JWTAuthorization jwtAuthorization = authorizationService
                 .authorize(
-                        request.getAuthorizationToken(),
-                        request.getRefreshAuthorizationToken(),
-                        request.getRoleRequiredByEndpoint());
+                        authorizationToken,
+                        new JWTAuthorization(refreshAuthentication).getAuthorizationToken(),
+                        role);
 
-        return new AuthorizationResponse(jwtAuthorization.getToken());
+        System.out.println("Autorizado!");
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .header(HttpHeaders.AUTHORIZATION, jwtAuthorization.getAuthorizationToken())
+                .build();
     }
 }

@@ -14,7 +14,9 @@ public class JWTAuthorization {
 
     private final String authorization;
 
-    private JWTAuthorization(String authorization) {
+    public JWTAuthorization(String authorization) {
+        JWTTokens.checkTokenSignature(authorization);
+
         this.authorization = authorization;
     }
 
@@ -27,11 +29,11 @@ public class JWTAuthorization {
     }
 
     public static JWTAuthorization validateAuthorizationToken(String authorizationToken) {
-        String token = removingPrefix(authorizationToken);
+        String authorization = removingPrefix(authorizationToken);
 
-        JWTTokens.checkTokenSignature(token);
+        JWTTokens.checkTokenSignature(authorization);
 
-        return new JWTAuthorization(token);
+        return new JWTAuthorization(authorization);
     }
 
     public String getSubject() {
@@ -48,8 +50,12 @@ public class JWTAuthorization {
         return null;
     }
 
-    public String getToken() {
+    public String getAuthorizationToken() {
         return AUTHORIZATION_BEARER_PREFIX + authorization;
+    }
+
+    public String getAuthorization() {
+        return authorization;
     }
 
     private static String generateAuthorization(String subject, Role role) {

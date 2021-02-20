@@ -2,6 +2,8 @@ package com.harmony.authservice.domain.auth.model;
 
 public class JWTAuthorizationTokenPair {
 
+    public static final String REFRESH_AUTHENTICATION_COOKIE_KEY = "refresh-authentication";
+
     private final JWTAuthorization authorization;
     private final JWTAuthorization refreshAuthorization;
 
