@@ -5,36 +5,57 @@ import com.harmony.authservice.domain.auth.model.JWTAuthorizationTokenPair;
 import com.harmony.authservice.domain.auth.model.JWTAuthorization;
 import com.harmony.authservice.domain.credential.exception.CredentialNotFoundException;
 import com.harmony.authservice.domain.credential.model.Credential;
-import com.harmony.authservice.domain.credential.model.Role;
-import com.harmony.authservice.domain.credential.service.CredentialService;
+import com.harmony.authservice.domain.credential.dataprovider.CredentialDataProvider;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-
-import static com.harmony.authservice.domain.auth.model.JWTAuthorization.REFRESH_TOKEN_EXPIRATION_TIME;
 
 @Service
 public class AuthenticationService {
 
-    private final CredentialService credentialService;
+    @Value("${auth.authorization-token.ttl}")
+    private Long authorizationTokenTimeToLive;
+    @Value("${auth.refresh-authorization-token.ttl}")
+    private Long refreshAuthorizationTokenTimeToLive;
 
-    public AuthenticationService(CredentialService credentialService) {
-        this.credentialService = credentialService;
+    private final CredentialDataProvider credentialDataProvider;
+
+    public AuthenticationService(CredentialDataProvider credentialDataProvider) {
+        this.credentialDataProvider = credentialDataProvider;
     }
 
-    public JWTAuthorizationTokenPair authenticate(String username, String rawPassword) throws Exception {
+    public JWTAuthorizationTokenPair authenticate(String email, String rawPassword) throws Exception {
         try {
-            Credential credential = credentialService.findByEmail(username);
+            Credential credential = credentialDataProvider.findByEmail(email);
 
             if(credential.getPassword().matches(rawPassword)) {
-                JWTAuthorization authorization = JWTAuthorization.withEmailAndRole(credential.getEmail().getValue(), credential.getRole());
-                JWTAuthorization refreshAuthorization = JWTAuthorization
-                        .withEmailAndExpirationTimeAndRole(credential.getEmail().getValue(), REFRESH_TOKEN_EXPIRATION_TIME, credential.getRole());
+                JWTAuthorization authorization = createAuthorization(credential);
+                JWTAuthorization refreshAuthorization = createRefreshAuthorization(credential);
 
-                return new JWTAuthorizationTokenPair(authorization, refreshAuthorization);
+                return new JWTAuthorizationTokenPair(
+                        authorization,
+                        refreshAuthorization
+                );
             }
 
             throw new AuthenticationException();
         }catch (CredentialNotFoundException exception) {
             throw new AuthenticationException();
         }
+    }
+
+    private JWTAuthorization createAuthorization(Credential credential) {
+        return JWTAuthorization.withEmailAndExpirationTimeAndRole(
+                credential.getEmail().getValue(),
+                authorizationTokenTimeToLive,
+                credential.getRole()
+        );
+    }
+
+    private JWTAuthorization createRefreshAuthorization(Credential credential) {
+        return JWTAuthorization.withEmailAndExpirationTimeAndRole(
+                credential.getEmail().getValue(),
+                refreshAuthorizationTokenTimeToLive,
+                credential.getRole()
+        );
     }
 }
