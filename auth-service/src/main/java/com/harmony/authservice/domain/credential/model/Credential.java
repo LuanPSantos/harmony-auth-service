@@ -16,7 +16,7 @@ public class Credential {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    public Credential() {
+    private Credential() {
     }
 
     public Credential(String email, String password, Role role) {

@@ -4,6 +4,7 @@ import com.harmony.authservice.domain.auth.exception.ForbiddenException;
 import com.harmony.authservice.domain.auth.model.JWTAuthorization;
 import com.harmony.authservice.domain.credential.model.Role;
 import io.jsonwebtoken.ExpiredJwtException;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import static com.harmony.authservice.domain.auth.model.JWTAuthorization.validateAuthorizationToken;
@@ -11,11 +12,14 @@ import static com.harmony.authservice.domain.auth.model.JWTAuthorization.validat
 @Service
 public class AuthorizationService {
 
-    public JWTAuthorization authorize(String authorizationToken, String refreshAuthorizationToken, Role roleRequiredByEndpoint) throws ForbiddenException{
+    @Value("${auth.authorization-token.ttl}")
+    private Long authorizationTokenTimeToLive;
+
+    public JWTAuthorization authorize(String authorizationToken, String refreshAuthorizationToken, Role roleRequired) throws ForbiddenException{
         try {
             JWTAuthorization jwtAuthorization = validateAuthorizationToken(authorizationToken);
 
-            if(jwtAuthorization.getRole() == roleRequiredByEndpoint) {
+            if(jwtAuthorization.getRole() == roleRequired) {
                 return jwtAuthorization;
             }
 
@@ -23,8 +27,11 @@ public class AuthorizationService {
         }catch (ExpiredJwtException authorizationExpiredException) {
             JWTAuthorization refreshAuthorization = validateAuthorizationToken(refreshAuthorizationToken);
 
-            if(refreshAuthorization.getRole() == roleRequiredByEndpoint) {
-                return JWTAuthorization.withEmailAndRole(refreshAuthorization.getSubject(), refreshAuthorization.getRole());
+            if(refreshAuthorization.getRole() == roleRequired) {
+                return JWTAuthorization.withEmailAndExpirationTimeAndRole(
+                        refreshAuthorization.getSubject(),
+                        authorizationTokenTimeToLive,
+                        refreshAuthorization.getRole());
             }
 
             throw new ForbiddenException();
