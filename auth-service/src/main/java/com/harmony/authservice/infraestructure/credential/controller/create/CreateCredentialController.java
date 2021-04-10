@@ -1,9 +1,9 @@
 package com.harmony.authservice.infraestructure.credential.controller.create;
 
-import com.harmony.authservice.domain.usecase.UseCase;
+import com.harmony.authservice.app.usecase.UseCase;
 import com.harmony.authservice.infraestructure.credential.controller.create.request.CreateCredentialRequest;
-import com.harmony.authservice.domain.credential.usecase.create.io.CreateCredentialInput;
-import com.harmony.authservice.domain.credential.usecase.create.io.CreateCredentialOutput;
+import com.harmony.authservice.app.usecase.credential.create.io.CreateCredentialInput;
+import com.harmony.authservice.app.usecase.credential.create.io.CreateCredentialOutput;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
