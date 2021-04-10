@@ -1,7 +1,7 @@
 package com.harmony.authservice.infraestructure.credential.controller.delete;
 
-import com.harmony.authservice.domain.usecase.UseCase;
-import com.harmony.authservice.domain.credential.usecase.delete.io.DeleteCredentialInput;
+import com.harmony.authservice.app.usecase.UseCase;
+import com.harmony.authservice.app.usecase.credential.delete.io.DeleteCredentialInput;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;

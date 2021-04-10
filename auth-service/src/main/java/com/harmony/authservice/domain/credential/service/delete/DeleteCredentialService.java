@@ -1,18 +1,18 @@
 package com.harmony.authservice.domain.credential.service.delete;
 
-import com.harmony.authservice.domain.credential.dataprovider.CredentialDataProvider;
+import com.harmony.authservice.domain.credential.gateway.CredentialGateway;
 import org.springframework.stereotype.Service;
 
 @Service
 public class DeleteCredentialService {
 
-    private final CredentialDataProvider credentialDataProvider;
+    private final CredentialGateway credentialGateway;
 
-    public DeleteCredentialService(CredentialDataProvider credentialDataProvider) {
-        this.credentialDataProvider = credentialDataProvider;
+    public DeleteCredentialService(CredentialGateway credentialGateway) {
+        this.credentialGateway = credentialGateway;
     }
 
     public void deleteById(Long id) {
-        credentialDataProvider.deleteById(id);
+        credentialGateway.deleteById(id);
     }
 }

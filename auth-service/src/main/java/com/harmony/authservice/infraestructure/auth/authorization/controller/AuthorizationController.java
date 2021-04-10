@@ -1,10 +1,9 @@
 package com.harmony.authservice.infraestructure.auth.authorization.controller;
 
-import com.harmony.authservice.domain.auth.authorization.usecase.io.AuthorizationInput;
-import com.harmony.authservice.domain.auth.authorization.usecase.io.AuthorizationOutput;
+import com.harmony.authservice.app.usecase.auth.authorization.io.AuthorizationInput;
+import com.harmony.authservice.app.usecase.auth.authorization.io.AuthorizationOutput;
 import com.harmony.authservice.domain.credential.model.Role;
-import com.harmony.authservice.domain.usecase.UseCase;
-import com.harmony.authservice.infraestructure.auth.authentication.controller.AuthenticationController;
+import com.harmony.authservice.app.usecase.UseCase;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;

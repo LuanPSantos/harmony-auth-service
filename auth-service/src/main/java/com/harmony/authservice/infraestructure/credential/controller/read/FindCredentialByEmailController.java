@@ -1,8 +1,8 @@
 package com.harmony.authservice.infraestructure.credential.controller.read;
 
-import com.harmony.authservice.domain.usecase.UseCase;
-import com.harmony.authservice.domain.credential.usecase.read.io.FindCredentialByEmailInput;
-import com.harmony.authservice.domain.credential.usecase.read.io.FindCredentialByEmailOutput;
+import com.harmony.authservice.app.usecase.UseCase;
+import com.harmony.authservice.app.usecase.credential.read.io.FindCredentialByEmailInput;
+import com.harmony.authservice.app.usecase.credential.read.io.FindCredentialByEmailOutput;
 import com.harmony.authservice.infraestructure.credential.controller.read.response.FindCredentialByEmailResponse;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
