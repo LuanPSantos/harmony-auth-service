@@ -3,7 +3,7 @@ package com.harmony.authservice.domain.auth.service;
 import com.harmony.authservice.domain.auth.exception.AuthenticationException;
 import com.harmony.authservice.domain.auth.model.JWTAuthorizationTokenPair;
 import com.harmony.authservice.domain.auth.model.JWTAuthorization;
-import com.harmony.authservice.domain.credential.exception.CredentialNotFoundException;
+import com.harmony.authservice.domain.credential.gateway.exception.CredentialNotFoundException;
 import com.harmony.authservice.domain.credential.model.Credential;
 import com.harmony.authservice.domain.credential.gateway.CredentialGateway;
 import org.springframework.beans.factory.annotation.Value;

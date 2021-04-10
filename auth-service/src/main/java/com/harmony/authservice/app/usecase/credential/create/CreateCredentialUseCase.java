@@ -24,8 +24,6 @@ public class CreateCredentialUseCase implements UseCase<CreateCredentialInput, C
                 input.getPassword(),
                 input.getRole());
 
-        // Notify creation
-
         return new CreateCredentialOutput(
                 credential.getId(),
                 credential.getEmail().getValue(),
