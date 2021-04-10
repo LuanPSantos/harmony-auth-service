@@ -1,16 +1,16 @@
 package com.harmony.authservice.domain.credential.gateway;
 
 import com.harmony.authservice.domain.credential.model.Credential;
-import com.harmony.authservice.domain.credential.exception.CredentialNotFoundException;
+import com.harmony.authservice.domain.credential.gateway.exception.CredentialNotFoundException;
 
 
 public interface CredentialGateway {
 
-    public Credential findById(Long id) throws Exception;
+    Credential findById(Long id) throws CredentialNotFoundException;
 
-    public Credential findByEmail(String email) throws CredentialNotFoundException;
+    Credential findByEmail(String email) throws CredentialNotFoundException;
 
-    public Credential save(Credential credential);
+    Credential save(Credential credential);
 
-    public void deleteById(Long id);
+    void deleteById(Long id);
 }

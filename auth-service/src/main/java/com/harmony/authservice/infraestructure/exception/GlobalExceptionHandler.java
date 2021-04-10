@@ -5,7 +5,7 @@ import com.harmony.authservice.infraestructure.exception.model.Error;
 import com.harmony.authservice.infraestructure.exception.response.ExceptionResponse;
 import com.harmony.authservice.domain.auth.exception.AuthenticationException;
 import com.harmony.authservice.domain.auth.exception.ForbiddenException;
-import com.harmony.authservice.domain.credential.exception.CredentialNotFoundException;
+import com.harmony.authservice.domain.credential.gateway.exception.CredentialNotFoundException;
 import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;

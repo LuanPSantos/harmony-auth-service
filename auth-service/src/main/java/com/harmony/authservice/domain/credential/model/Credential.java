@@ -1,25 +1,25 @@
 package com.harmony.authservice.domain.credential.model;
 
-import javax.persistence.*;
 import java.util.Objects;
 
-@Entity
 public class Credential {
 
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Id
     private Long id;
-    @Embedded
     private Email email;
-    @Embedded
     private Password password;
-    @Enumerated(EnumType.STRING)
     private Role role;
 
     private Credential() {
     }
 
     public Credential(String email, String password, Role role) {
+        this.email = new Email(email);
+        this.password = new Password(password);
+        this.role = role;
+    }
+
+    public Credential(Long id, String email, String password, Role role) {
+        this.id = id;
         this.email = new Email(email);
         this.password = new Password(password);
         this.role = role;
@@ -53,7 +53,7 @@ public class Credential {
 
     public void validate() throws Exception {
         if (email.getValue().contains(password.getValue())) {
-            throw new Exception("A senha não pode conter a senha");
+            throw new Exception("O email não pode conter a senha");
         }
     }
 
