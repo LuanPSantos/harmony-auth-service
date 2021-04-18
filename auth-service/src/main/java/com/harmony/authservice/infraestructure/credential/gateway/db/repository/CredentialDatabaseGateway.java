@@ -3,7 +3,6 @@ package com.harmony.authservice.infraestructure.credential.gateway.db.repository
 import com.harmony.authservice.domain.credential.gateway.CredentialGateway;
 import com.harmony.authservice.domain.credential.gateway.exception.CredentialNotFoundException;
 import com.harmony.authservice.domain.credential.model.Credential;
-import com.harmony.authservice.domain.credential.model.Email;
 import com.harmony.authservice.domain.credential.model.Role;
 import com.harmony.authservice.infraestructure.credential.gateway.db.entity.CredentialEntity;
 import org.springframework.stereotype.Service;
@@ -35,7 +34,7 @@ public class CredentialDatabaseGateway implements CredentialGateway {
     @Override
     public Credential findByEmail(String email) throws CredentialNotFoundException {
         CredentialEntity entity = credentialRepository
-                .findByEmail(new Email(email))
+                .findByEmail(email)
                 .orElseThrow(CredentialNotFoundException::new);
 
         return new Credential(
