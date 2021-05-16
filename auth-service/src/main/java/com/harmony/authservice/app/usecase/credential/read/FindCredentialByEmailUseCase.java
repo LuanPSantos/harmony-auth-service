@@ -17,9 +17,9 @@ public class FindCredentialByEmailUseCase implements UseCase<FindCredentialByEma
     }
 
     @Override
-    public FindCredentialByEmailOutput execute(FindCredentialByEmailInput payload) throws Exception {
+    public FindCredentialByEmailOutput execute(FindCredentialByEmailInput input) throws Exception {
 
-        Credential credential = findCredentialByEmailService.findByEmail(payload.getEmail());
+        Credential credential = findCredentialByEmailService.findByEmail(input.getEmail());
 
 
         return new FindCredentialByEmailOutput(

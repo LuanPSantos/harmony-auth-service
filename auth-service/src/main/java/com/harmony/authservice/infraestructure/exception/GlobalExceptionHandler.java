@@ -40,7 +40,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ExceptionResponse> handle(CredentialNotFoundException exception) {
         ExceptionResponse body = new ExceptionResponse(Collections.singletonList(new Error(exception.getMessage())));
 
-        return ResponseEntity.status(BAD_REQUEST).body(body);
+        return ResponseEntity.status(NOT_FOUND).body(body);
     }
 
     @ExceptionHandler({ForbiddenException.class})
