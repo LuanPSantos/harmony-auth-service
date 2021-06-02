@@ -27,7 +27,7 @@ public class CreateCredentialController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> create(@RequestBody @Valid CreateCredentialRequest request) throws Exception {
+    public ResponseEntity<CreateCredentialOutput> create(@RequestBody @Valid CreateCredentialRequest request) throws Exception {
         CreateCredentialOutput output = createCredentialUseCase.execute(new CreateCredentialInput(
                 request.getEmail(),
                 request.getPassword(),
@@ -40,6 +40,6 @@ public class CreateCredentialController {
                 .buildAndExpand(output.getId())
                 .toUri();
 
-        return ResponseEntity.created(uri).build();
+        return ResponseEntity.created(uri).body(output);
     }
 }
