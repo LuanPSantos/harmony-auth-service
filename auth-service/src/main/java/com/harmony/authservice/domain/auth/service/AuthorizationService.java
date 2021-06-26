@@ -15,19 +15,19 @@ public class AuthorizationService {
     @Value("${auth.authorization-token.ttl}")
     private Long authorizationTokenTimeToLive;
 
-    public JWTAuthorization authorize(String authorizationToken, String refreshAuthorizationToken, Role roleRequired) throws ForbiddenException{
+    public JWTAuthorization authorize(String authorizationToken, String refreshAuthorizationToken, Role roleRequired) throws ForbiddenException {
         try {
             JWTAuthorization jwtAuthorization = validateAuthorizationToken(authorizationToken);
 
-            if(jwtAuthorization.getRole() == roleRequired) {
+            if (jwtAuthorization.getRole() == roleRequired) {
                 return jwtAuthorization;
             }
 
             throw new ForbiddenException();
-        }catch (ExpiredJwtException authorizationExpiredException) {
+        } catch (ExpiredJwtException authorizationExpiredException) {
             JWTAuthorization refreshAuthorization = validateAuthorizationToken(refreshAuthorizationToken);
 
-            if(refreshAuthorization.getRole() == roleRequired) {
+            if (refreshAuthorization.getRole() == roleRequired) {
                 return JWTAuthorization.withEmailAndExpirationTimeAndRole(
                         refreshAuthorization.getSubject(),
                         authorizationTokenTimeToLive,

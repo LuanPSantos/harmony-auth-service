@@ -3,6 +3,7 @@ package com.harmony.authservice.infraestructure.credential.controller.create.req
 import com.harmony.authservice.domain.credential.model.Role;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 public class CreateCredentialRequest {
 
@@ -10,6 +11,7 @@ public class CreateCredentialRequest {
     private String email;
     @NotBlank(message = "O campo 'password' não pode ser nulo ou vazio")
     private String password;
+    @NotNull(message = "O campo 'role' não pode ser nulo")
     private Role role;
 
     public String getEmail() {
@@ -21,7 +23,7 @@ public class CreateCredentialRequest {
     }
 
     public Role getRole() {
-        if(role == null) {
+        if (role == null) {
             return Role.USER;
         }
 

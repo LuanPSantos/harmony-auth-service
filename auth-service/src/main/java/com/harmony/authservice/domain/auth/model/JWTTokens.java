@@ -1,22 +1,19 @@
-package com.harmony.authservice.app.jwt;
+package com.harmony.authservice.domain.auth.model;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.util.Base64Utils;
-import java.nio.charset.StandardCharsets;
+
 import java.util.Date;
 import java.util.Map;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
+
 public class JWTTokens {
 
-    static final long EXPIRATION_TIME_IN_MILLIS_SEC = 60_000;
     static final String SECRET = "MySecret";
-
-    public static <T> String generateJwtToken(String subject, Map.Entry<String, T> customField) {
-        return generateJwtToken(subject, EXPIRATION_TIME_IN_MILLIS_SEC, customField);
-    }
 
     public static <T> String generateJwtToken(String subject, Long timeToLive, Map.Entry<String, T> customField) {
         return Jwts.builder()
@@ -48,6 +45,6 @@ public class JWTTokens {
     }
 
     private static String getEncodedSecret() {
-        return Base64Utils.encodeToUrlSafeString(JWTTokens.SECRET.getBytes(StandardCharsets.UTF_8));
+        return Base64Utils.encodeToUrlSafeString(JWTTokens.SECRET.getBytes(UTF_8));
     }
 }

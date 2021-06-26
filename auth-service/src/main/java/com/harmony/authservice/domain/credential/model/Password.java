@@ -7,23 +7,17 @@ import javax.persistence.Embeddable;
 import javax.persistence.Transient;
 import java.util.Objects;
 
-@Embeddable
 public class Password {
 
-    @Transient
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
-    @Column(name = "password", nullable = false)
-    private String value;
-
-    public Password() {
-    }
+    private final String value;
 
     public Password(String password) {
         this.value = password;
     }
 
-    public String getValue() {
+    public String get() {
         return value;
     }
 

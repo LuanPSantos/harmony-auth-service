@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 
 import static com.harmony.authservice.infraestructure.auth.authentication.controller.AuthenticationController.REFRESH_AUTHORIZATION_COOKIE_KEY;
 
-
 @RestController
 @RequestMapping("authorizations")
 public class AuthorizationController {
@@ -40,7 +39,7 @@ public class AuthorizationController {
 
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .header(HttpHeaders.AUTHORIZATION, output.getAuthorizationToken())
+                .header(HttpHeaders.AUTHORIZATION, output.getJwtAuthorization().asToken())
                 .build();
     }
 }

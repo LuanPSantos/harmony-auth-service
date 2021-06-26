@@ -1,12 +1,12 @@
-package com.harmony.authservice.infraestructure.credential.gateway.db.entity;
+package com.harmony.authservice.infraestructure.credential.gateway.db.repository.entity;
 
 import javax.persistence.*;
 
 @Entity
 public class CredentialEntity {
 
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(unique = true)
     private String email;

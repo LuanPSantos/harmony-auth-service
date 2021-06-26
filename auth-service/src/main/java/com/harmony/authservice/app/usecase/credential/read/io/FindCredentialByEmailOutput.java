@@ -1,35 +1,15 @@
 package com.harmony.authservice.app.usecase.credential.read.io;
 
-import com.harmony.authservice.domain.credential.model.Email;
-import com.harmony.authservice.domain.credential.model.Password;
-import com.harmony.authservice.domain.credential.model.Role;
+import com.harmony.authservice.domain.credential.model.Credential;
 
 public class FindCredentialByEmailOutput {
-    private final Long id;
-    private final Email email;
-    private final Password password;
-    private final Role role;
+    private final Credential credential;
 
-    public FindCredentialByEmailOutput(Long id, Email email, Password password, Role role) {
-        this.id = id;
-        this.email = email;
-        this.password = password;
-        this.role = role;
+    public FindCredentialByEmailOutput(Credential credential) {
+        this.credential = credential;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public Email getEmail() {
-        return email;
-    }
-
-    public Password getPassword() {
-        return password;
-    }
-
-    public Role getRole() {
-        return role;
+    public Credential getCredential() {
+        return credential;
     }
 }

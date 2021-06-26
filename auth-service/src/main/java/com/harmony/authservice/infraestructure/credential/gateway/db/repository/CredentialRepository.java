@@ -1,6 +1,6 @@
 package com.harmony.authservice.infraestructure.credential.gateway.db.repository;
 
-import com.harmony.authservice.infraestructure.credential.gateway.db.entity.CredentialEntity;
+import com.harmony.authservice.infraestructure.credential.gateway.db.repository.entity.CredentialEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 

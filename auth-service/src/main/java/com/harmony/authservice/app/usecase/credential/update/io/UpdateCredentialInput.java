@@ -1,25 +1,15 @@
 package com.harmony.authservice.app.usecase.credential.update.io;
 
+import com.harmony.authservice.domain.credential.model.Credential;
+
 public class UpdateCredentialInput {
-    private Long id;
-    private String email;
-    private String password;
+    private final Credential credential;
 
-    public UpdateCredentialInput(Long id, String email, String password) {
-        this.id = id;
-        this.email = email;
-        this.password = password;
+    public UpdateCredentialInput(Credential credential) {
+        this.credential = credential;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public String getPassword() {
-        return password;
+    public Credential getCredential() {
+        return credential;
     }
 }

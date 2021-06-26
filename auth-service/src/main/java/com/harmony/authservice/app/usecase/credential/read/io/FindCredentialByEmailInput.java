@@ -1,14 +1,16 @@
 package com.harmony.authservice.app.usecase.credential.read.io;
 
+import com.harmony.authservice.domain.credential.model.Email;
+
 public class FindCredentialByEmailInput {
 
-    private final String email;
+    private final Email email;
 
-    public FindCredentialByEmailInput(String email) {
+    public FindCredentialByEmailInput(Email email) {
         this.email = email;
     }
 
-    public String getEmail() {
+    public Email getEmail() {
         return email;
     }
 }

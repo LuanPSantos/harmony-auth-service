@@ -24,9 +24,6 @@ public class AuthenticationUseCase implements UseCase<AuthenticationInput, Authe
                 input.getRawPassword()
         );
 
-        return new AuthenticationOutput(
-                authorizationTokenPair.getAuthorization().getAuthorizationToken(),
-                authorizationTokenPair.getRefreshAuthorization().getAuthorization()
-        );
+        return new AuthenticationOutput(authorizationTokenPair);
     }
 }

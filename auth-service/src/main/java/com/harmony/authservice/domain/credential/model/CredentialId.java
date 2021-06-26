@@ -2,15 +2,15 @@ package com.harmony.authservice.domain.credential.model;
 
 import java.util.Objects;
 
-public class Email {
+public class CredentialId {
 
-    private final String value;
+    private final Long value;
 
-    public Email(String email) {
-        this.value = email;
+    public CredentialId(Long value) {
+        this.value = value;
     }
 
-    public String get() {
+    public Long get() {
         return value;
     }
 
@@ -18,8 +18,8 @@ public class Email {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Email email = (Email) o;
-        return Objects.equals(value, email.value);
+        CredentialId that = (CredentialId) o;
+        return Objects.equals(value, that.value);
     }
 
     @Override

@@ -3,11 +3,13 @@ package com.harmony.authservice.domain.auth.service;
 import com.harmony.authservice.domain.auth.exception.AuthenticationException;
 import com.harmony.authservice.domain.auth.model.JWTAuthorizationTokenPair;
 import com.harmony.authservice.domain.auth.model.JWTAuthorization;
-import com.harmony.authservice.domain.credential.gateway.exception.CredentialNotFoundException;
+import com.harmony.authservice.domain.credential.model.Email;
 import com.harmony.authservice.domain.credential.model.Credential;
 import com.harmony.authservice.domain.credential.gateway.CredentialGateway;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+
+import javax.persistence.EntityNotFoundException;
 
 @Service
 public class AuthenticationService {
@@ -23,13 +25,13 @@ public class AuthenticationService {
         this.credentialGateway = credentialGateway;
     }
 
-    public JWTAuthorizationTokenPair authenticate(String email, String rawPassword) throws Exception {
+    public JWTAuthorizationTokenPair authenticate(Email email, String rawPassword) throws Exception {
         try {
             Credential credential = credentialGateway.findByEmail(email);
 
-            if(credential.getPassword().matches(rawPassword)) {
-                JWTAuthorization authorization = createAuthorization(credential);
-                JWTAuthorization refreshAuthorization = createRefreshAuthorization(credential);
+            if (credential.getPassword().matches(rawPassword)) {
+                JWTAuthorization authorization = createAuthorizationFor(credential);
+                JWTAuthorization refreshAuthorization = createRefreshAuthorizationFor(credential);
 
                 return new JWTAuthorizationTokenPair(
                         authorization,
@@ -38,22 +40,22 @@ public class AuthenticationService {
             }
 
             throw new AuthenticationException();
-        }catch (CredentialNotFoundException exception) {
+        } catch (EntityNotFoundException exception) {
             throw new AuthenticationException();
         }
     }
 
-    private JWTAuthorization createAuthorization(Credential credential) {
+    private JWTAuthorization createAuthorizationFor(Credential credential) {
         return JWTAuthorization.withEmailAndExpirationTimeAndRole(
-                credential.getEmail().getValue(),
+                credential.getEmail().get(),
                 authorizationTokenTimeToLive,
                 credential.getRole()
         );
     }
 
-    private JWTAuthorization createRefreshAuthorization(Credential credential) {
+    private JWTAuthorization createRefreshAuthorizationFor(Credential credential) {
         return JWTAuthorization.withEmailAndExpirationTimeAndRole(
-                credential.getEmail().getValue(),
+                credential.getEmail().get(),
                 refreshAuthorizationTokenTimeToLive,
                 credential.getRole()
         );

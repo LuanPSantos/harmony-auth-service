@@ -1,14 +1,15 @@
 package com.harmony.authservice.app.usecase.auth.authorization.io;
 
+import com.harmony.authservice.domain.auth.model.JWTAuthorization;
+
 public class AuthorizationOutput {
-    private final String authorizationToken;
+    private final JWTAuthorization jwtAuthorization;
 
-    public AuthorizationOutput(String authorizationToken) {
-
-        this.authorizationToken = authorizationToken;
+    public AuthorizationOutput(JWTAuthorization jwtAuthorization) {
+        this.jwtAuthorization = jwtAuthorization;
     }
 
-    public String getAuthorizationToken() {
-        return authorizationToken;
+    public JWTAuthorization getJwtAuthorization() {
+        return jwtAuthorization;
     }
 }

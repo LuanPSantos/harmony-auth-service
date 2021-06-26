@@ -1,35 +1,40 @@
 package com.harmony.authservice.domain.credential.model;
 
+import com.harmony.authservice.domain.credential.exception.PasswordInvalidException;
+
 import java.util.Objects;
 
 public class Credential {
 
-    private Long id;
+    private CredentialId id;
     private Email email;
     private Password password;
     private Role role;
 
-    private Credential() {
-    }
-
-    public Credential(String email, String password, Role role) {
-        this.email = new Email(email);
-        this.password = new Password(password);
+    public Credential(Email email, Password password, Role role) {
+        this.email = email;
+        this.password = password;
         this.role = role;
     }
 
-    public Credential(Long id, String email, String password, Role role) {
+    public Credential(CredentialId id, Email email, Password password, Role role) {
         this.id = id;
-        this.email = new Email(email);
-        this.password = new Password(password);
+        this.email = email;
+        this.password = password;
         this.role = role;
+    }
+
+    public Credential(CredentialId id, Email email, Password password) {
+        this.id = id;
+        this.email = email;
+        this.password = password;
     }
 
     public Role getRole() {
         return role;
     }
 
-    public Long getId() {
+    public CredentialId getId() {
         return id;
     }
 
@@ -37,23 +42,25 @@ public class Credential {
         return email;
     }
 
-    public Credential setEmail(Email email) {
-        this.email = email;
-        return this;
+    public void updateEmail(Email email) {
+        if (email.get() != null) {
+            this.email = email;
+        }
     }
 
     public Password getPassword() {
         return password;
     }
 
-    public Credential setPassword(Password password) {
-        this.password = password;
-        return this;
+    public void updatePassword(Password password) {
+        if (password != null && password.get() != null) {
+            this.password = password;
+        }
     }
 
     public void validate() throws Exception {
-        if (email.getValue().contains(password.getValue())) {
-            throw new Exception("O email não pode conter a senha");
+        if (email.get().contains(password.get())) {
+            throw new PasswordInvalidException("O email não pode conter a senha");
         }
     }
 
@@ -62,7 +69,7 @@ public class Credential {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Credential that = (Credential) o;
-        return id.equals(that.id);
+        return Objects.equals(id, that.id);
     }
 
     @Override

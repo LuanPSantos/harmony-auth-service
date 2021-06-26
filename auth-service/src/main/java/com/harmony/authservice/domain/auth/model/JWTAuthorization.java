@@ -1,6 +1,5 @@
 package com.harmony.authservice.domain.auth.model;
 
-import com.harmony.authservice.app.jwt.JWTTokens;
 import com.harmony.authservice.domain.credential.model.Role;
 
 import java.util.AbstractMap.SimpleEntry;
@@ -44,7 +43,7 @@ public class JWTAuthorization {
         return null;
     }
 
-    public String getAuthorizationToken() {
+    public String asToken() {
         return AUTHORIZATION_BEARER_PREFIX + authorization;
     }
 

@@ -25,8 +25,6 @@ public class AuthorizationUseCase implements UseCase<AuthorizationInput, Authori
                 input.getRequiredRole()
         );
 
-        return new AuthorizationOutput(
-                authorization.getAuthorizationToken()
-        );
+        return new AuthorizationOutput(authorization);
     }
 }

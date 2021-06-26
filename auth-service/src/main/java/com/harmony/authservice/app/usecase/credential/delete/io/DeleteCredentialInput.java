@@ -1,13 +1,15 @@
 package com.harmony.authservice.app.usecase.credential.delete.io;
 
-public class DeleteCredentialInput {
-    private final Long id;
+import com.harmony.authservice.domain.credential.model.CredentialId;
 
-    public DeleteCredentialInput(Long id) {
-        this.id = id;
+public class DeleteCredentialInput {
+    private final CredentialId credentialId;
+
+    public DeleteCredentialInput(CredentialId credentialId) {
+        this.credentialId = credentialId;
     }
 
-    public Long getId() {
-        return id;
+    public CredentialId getCredentialId() {
+        return credentialId;
     }
 }
