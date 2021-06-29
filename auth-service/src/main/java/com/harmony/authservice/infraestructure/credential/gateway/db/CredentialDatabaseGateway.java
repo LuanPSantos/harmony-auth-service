@@ -7,9 +7,6 @@ import com.harmony.authservice.infraestructure.credential.gateway.db.repository.
 import com.harmony.authservice.infraestructure.credential.gateway.db.repository.CredentialRepository;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityNotFoundException;
-
-
 @Service
 public class CredentialDatabaseGateway implements CredentialGateway {
 
@@ -34,10 +31,10 @@ public class CredentialDatabaseGateway implements CredentialGateway {
     }
 
     @Override
-    public Credential findByEmail(Email email) {
+    public Credential findByEmail(Email email) throws CredentialNotFoundException {
         CredentialEntity entity = credentialRepository
                 .findByEmail(email.get())
-                .orElseThrow(EntityNotFoundException::new);
+                .orElseThrow(CredentialNotFoundException::new);
 
         return new Credential(
                 new CredentialId(entity.getId()),
@@ -66,5 +63,15 @@ public class CredentialDatabaseGateway implements CredentialGateway {
     @Override
     public void deleteById(CredentialId id) {
         credentialRepository.deleteById(id.get());
+    }
+
+    @Override
+    public void update(Credential credential) {
+        credentialRepository.save(new CredentialEntity(
+                credential.getId().get(),
+                credential.getEmail().get(),
+                credential.getPassword().get(),
+                credential.getRole().name()
+        ));
     }
 }

@@ -1,6 +1,7 @@
 package com.harmony.authservice.app.usecase.credential.create;
 
 import com.harmony.authservice.app.usecase.UseCase;
+import com.harmony.authservice.domain.credential.exception.PasswordInvalidException;
 import com.harmony.authservice.domain.credential.gateway.CreateCredentialGateway;
 import com.harmony.authservice.domain.credential.model.Credential;
 import com.harmony.authservice.domain.credential.model.Password;
@@ -20,7 +21,9 @@ public class CreateCredentialUseCase implements UseCase<CreateCredentialInput, C
     }
 
     @Override
-    public CreateCredentialOutput execute(CreateCredentialInput input) throws Exception {
+    public CreateCredentialOutput execute(CreateCredentialInput input) throws PasswordInvalidException {
+        input.getCredential().validate();
+
         String encodedPassword = passwordEncoder.encode(input.getCredential().getPassword().get());
 
         Credential credential = new Credential(
@@ -28,8 +31,6 @@ public class CreateCredentialUseCase implements UseCase<CreateCredentialInput, C
                 new Password(encodedPassword),
                 input.getCredential().getRole()
         );
-
-        credential.validate();
 
         credential = createCredentialGateway.create(credential);
 

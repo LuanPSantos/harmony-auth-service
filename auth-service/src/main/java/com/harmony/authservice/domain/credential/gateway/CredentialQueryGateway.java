@@ -8,5 +8,5 @@ import com.harmony.authservice.domain.credential.exception.CredentialNotFoundExc
 public interface CredentialQueryGateway {
     Credential findById(CredentialId id) throws CredentialNotFoundException;
 
-    Credential findByEmail(Email email);
+    Credential findByEmail(Email email) throws CredentialNotFoundException;
 }

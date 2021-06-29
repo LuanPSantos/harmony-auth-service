@@ -3,11 +3,12 @@ package com.harmony.authservice.domain.auth.model;
 import com.harmony.authservice.domain.credential.model.Role;
 
 import java.util.AbstractMap.SimpleEntry;
+import java.util.Objects;
 
 public class JWTAuthorization {
 
     private static final String AUTHORIZATION_BEARER_PREFIX = "Bearer ";
-    private static final String ROLE_FIELD = "role";
+    public static final String ROLE_FIELD = "role";
 
     private final String authorization;
 
@@ -18,7 +19,7 @@ public class JWTAuthorization {
     }
 
     public static JWTAuthorization withEmailAndExpirationTimeAndRole(String subject, Long expirationTime, Role role) {
-        return new JWTAuthorization(generateAuthorization(subject, expirationTime, role));
+        return new JWTAuthorization(generateAuthorization(subject, role, expirationTime));
     }
 
     public static JWTAuthorization validateAuthorizationToken(String authorizationToken) {
@@ -29,7 +30,7 @@ public class JWTAuthorization {
         return new JWTAuthorization(authorization);
     }
 
-    public String getSubject() {
+    public String getEmail() {
         if (authorization != null) {
             return JWTTokens.extractSubjectFromJwtToken(authorization);
         }
@@ -51,12 +52,24 @@ public class JWTAuthorization {
         return authorization;
     }
 
-    private static String generateAuthorization(String subject, Long timeToLive, Role role) {
-        return JWTTokens.generateJwtToken(subject, timeToLive, new SimpleEntry<>(ROLE_FIELD, role));
+    private static String generateAuthorization(String email, Role role, Long timeToLive) {
+        return JWTTokens.generateJwtToken(email, timeToLive, new SimpleEntry<>(ROLE_FIELD, role));
     }
 
     private static String removingPrefix(String token) {
         return token.replace(AUTHORIZATION_BEARER_PREFIX, "");
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        JWTAuthorization that = (JWTAuthorization) o;
+        return Objects.equals(authorization, that.authorization);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(authorization);
+    }
 }

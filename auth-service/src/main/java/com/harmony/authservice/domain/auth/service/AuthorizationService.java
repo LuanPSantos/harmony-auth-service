@@ -4,16 +4,16 @@ import com.harmony.authservice.domain.auth.exception.ForbiddenException;
 import com.harmony.authservice.domain.auth.model.JWTAuthorization;
 import com.harmony.authservice.domain.credential.model.Role;
 import io.jsonwebtoken.ExpiredJwtException;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
 
 import static com.harmony.authservice.domain.auth.model.JWTAuthorization.validateAuthorizationToken;
 
-@Service
 public class AuthorizationService {
 
-    @Value("${auth.authorization-token.ttl}")
-    private Long authorizationTokenTimeToLive;
+    private final Long authorizationTokenTimeToLive;
+
+    public AuthorizationService(Long authorizationTokenTimeToLive) {
+        this.authorizationTokenTimeToLive = authorizationTokenTimeToLive;
+    }
 
     public JWTAuthorization authorize(String authorizationToken, String refreshAuthorizationToken, Role roleRequired) throws ForbiddenException {
         try {
@@ -29,7 +29,7 @@ public class AuthorizationService {
 
             if (refreshAuthorization.getRole() == roleRequired) {
                 return JWTAuthorization.withEmailAndExpirationTimeAndRole(
-                        refreshAuthorization.getSubject(),
+                        refreshAuthorization.getEmail(),
                         authorizationTokenTimeToLive,
                         refreshAuthorization.getRole());
             }

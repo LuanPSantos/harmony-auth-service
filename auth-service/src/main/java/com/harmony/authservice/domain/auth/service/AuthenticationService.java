@@ -3,31 +3,36 @@ package com.harmony.authservice.domain.auth.service;
 import com.harmony.authservice.domain.auth.exception.AuthenticationException;
 import com.harmony.authservice.domain.auth.model.JWTAuthorizationTokenPair;
 import com.harmony.authservice.domain.auth.model.JWTAuthorization;
+import com.harmony.authservice.domain.credential.exception.CredentialNotFoundException;
+import com.harmony.authservice.domain.credential.gateway.CredentialQueryGateway;
 import com.harmony.authservice.domain.credential.model.Email;
 import com.harmony.authservice.domain.credential.model.Credential;
-import com.harmony.authservice.domain.credential.gateway.CredentialGateway;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-
-import javax.persistence.EntityNotFoundException;
 
 @Service
 public class AuthenticationService {
 
-    @Value("${auth.authorization-token.ttl}")
-    private Long authorizationTokenTimeToLive;
-    @Value("${auth.refresh-authorization-token.ttl}")
-    private Long refreshAuthorizationTokenTimeToLive;
+    private final Long authorizationTokenTimeToLive;
+    private final Long refreshAuthorizationTokenTimeToLive;
 
-    private final CredentialGateway credentialGateway;
+    private final CredentialQueryGateway credentialQueryGateway;
 
-    public AuthenticationService(CredentialGateway credentialGateway) {
-        this.credentialGateway = credentialGateway;
+    public AuthenticationService(
+            CredentialQueryGateway credentialQueryGateway,
+            @Value("${auth.authorization-token.ttl}")
+            Long authorizationTokenTTL,
+            @Value("${auth.refresh-authorization-token.ttl}")
+            Long refreshAuthorizationTokenTTL
+    ) {
+        this.credentialQueryGateway = credentialQueryGateway;
+        this.authorizationTokenTimeToLive = authorizationTokenTTL;
+        this.refreshAuthorizationTokenTimeToLive = refreshAuthorizationTokenTTL;
     }
 
     public JWTAuthorizationTokenPair authenticate(Email email, String rawPassword) throws Exception {
         try {
-            Credential credential = credentialGateway.findByEmail(email);
+            Credential credential = credentialQueryGateway.findByEmail(email);
 
             if (credential.getPassword().matches(rawPassword)) {
                 JWTAuthorization authorization = createAuthorizationFor(credential);
@@ -40,7 +45,7 @@ public class AuthenticationService {
             }
 
             throw new AuthenticationException();
-        } catch (EntityNotFoundException exception) {
+        } catch (CredentialNotFoundException exception) {
             throw new AuthenticationException();
         }
     }

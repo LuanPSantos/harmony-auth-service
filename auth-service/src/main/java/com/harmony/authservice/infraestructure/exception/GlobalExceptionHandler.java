@@ -1,5 +1,6 @@
 package com.harmony.authservice.infraestructure.exception;
 
+import com.harmony.authservice.infraestructure.exception.model.Error;
 import com.harmony.authservice.infraestructure.exception.response.ExceptionResponse;
 import com.harmony.authservice.domain.auth.exception.AuthenticationException;
 import com.harmony.authservice.domain.auth.exception.ForbiddenException;

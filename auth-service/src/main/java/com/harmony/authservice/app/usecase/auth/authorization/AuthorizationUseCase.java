@@ -5,6 +5,7 @@ import com.harmony.authservice.app.usecase.auth.authorization.io.AuthorizationIn
 import com.harmony.authservice.app.usecase.auth.authorization.io.AuthorizationOutput;
 import com.harmony.authservice.domain.auth.model.JWTAuthorization;
 import com.harmony.authservice.app.usecase.UseCase;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -12,8 +13,10 @@ public class AuthorizationUseCase implements UseCase<AuthorizationInput, Authori
 
     private final AuthorizationService authorizationService;
 
-    public AuthorizationUseCase(AuthorizationService authorizationService) {
-        this.authorizationService = authorizationService;
+    public AuthorizationUseCase(
+                    @Value("${auth.authorization-token.ttl}")
+                    Long authorizationTokenTimeToLive) {
+        this.authorizationService = new AuthorizationService(authorizationTokenTimeToLive);
     }
 
     @Override

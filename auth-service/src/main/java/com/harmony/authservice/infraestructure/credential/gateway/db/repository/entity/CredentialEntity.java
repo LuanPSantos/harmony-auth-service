@@ -16,6 +16,13 @@ public class CredentialEntity {
     public CredentialEntity() {
     }
 
+    public CredentialEntity(Long id, String email, String password, String role) {
+        this.id = id;
+        this.email = email;
+        this.password = password;
+        this.role = role;
+    }
+
     public CredentialEntity(String email, String password, String role) {
         this.email = email;
         this.password = password;

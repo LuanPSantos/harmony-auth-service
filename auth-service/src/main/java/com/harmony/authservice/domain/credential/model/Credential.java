@@ -1,6 +1,7 @@
 package com.harmony.authservice.domain.credential.model;
 
 import com.harmony.authservice.domain.credential.exception.PasswordInvalidException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.Objects;
 
@@ -43,7 +44,7 @@ public class Credential {
     }
 
     public void updateEmail(Email email) {
-        if (email.get() != null) {
+        if (email != null && email.get() != null) {
             this.email = email;
         }
     }
@@ -54,13 +55,13 @@ public class Credential {
 
     public void updatePassword(Password password) {
         if (password != null && password.get() != null) {
-            this.password = password;
+            this.password = new Password(new BCryptPasswordEncoder().encode(password.get()));
         }
     }
 
-    public void validate() throws Exception {
+    public void validate() throws PasswordInvalidException {
         if (email.get().contains(password.get())) {
-            throw new PasswordInvalidException("O email não pode conter a senha");
+            throw new PasswordInvalidException("A senha não pode ser parte do email");
         }
     }
 
