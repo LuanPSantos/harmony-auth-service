@@ -18,8 +18,8 @@ public class JWTAuthorization {
         this.authorization = authorization;
     }
 
-    public static JWTAuthorization withEmailAndExpirationTimeAndRole(String subject, Long expirationTime, Role role) {
-        return new JWTAuthorization(generateAuthorization(subject, role, expirationTime));
+    public static JWTAuthorization withEmailAndExpirationTimeAndRole(String email, Long expirationTime, Role role) {
+        return new JWTAuthorization(generateAuthorization(email, role, expirationTime));
     }
 
     public static JWTAuthorization validateAuthorizationToken(String authorizationToken) {
