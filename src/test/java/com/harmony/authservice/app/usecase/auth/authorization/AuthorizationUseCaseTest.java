@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class AuthorizationUseCaseTest {
 
     private static final Email CREDENTIAL_EMAIL = new Email("credential@email.com");
-    private static final Long TTL = 1000L;
+    private static final Long TTL = 2000L;
 
     private AuthorizationUseCase authorizationUseCase;
 

@@ -34,7 +34,7 @@ public class JWTTokensTest {
     }
 
     @Test
-    void ShouldValidateDeJWTSignature() {
+    void ShouldValidateJWTSignature() {
         String jwt = JWTTokens.generateJwtToken(SUBJECT, TTL,CUSTOM_FIELDS);
 
         JWTTokens.checkTokenSignature(jwt);

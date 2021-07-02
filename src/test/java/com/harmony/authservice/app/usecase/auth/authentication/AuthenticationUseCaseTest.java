@@ -64,7 +64,7 @@ public class AuthenticationUseCaseTest {
 
     @Test
     void ShouldFailAuthenticationDueInvalidPassword() throws CredentialNotFoundException {
-        String wrongRawPassword = "wrongRawPassword";
+        RawPassword wrongRawPassword = new RawPassword("wrongRawPassword");
 
         when(credentialQueryGateway.findByEmail(eq(CREDENTIAL_EMAIL)))
                 .thenReturn(new Credential(CREDENTIAL_ID, CREDENTIAL_EMAIL, CREDENTIAL_PASSWORD, Role.USER));

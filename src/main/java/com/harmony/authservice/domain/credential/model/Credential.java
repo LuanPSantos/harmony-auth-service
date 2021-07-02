@@ -55,13 +55,18 @@ public class Credential {
 
     public void updatePassword(Password password) {
         if (password != null && password.get() != null) {
-            this.password = new Password(new BCryptPasswordEncoder().encode(password.get()));
+            if (password instanceof RawPassword) {
+                this.password = new EncodedPassword(new BCryptPasswordEncoder().encode(password.get()));
+            } else if (password instanceof EncodedPassword) {
+                this.password = password;
+            }
         }
     }
 
+    // TODO tá feio esse validate aqui - vou ver se tiro pra outra classe
     public void validate() throws PasswordInvalidException {
         if (email.get().contains(password.get())) {
-            throw new PasswordInvalidException("A senha não pode ser parte do email");
+            throw new PasswordInvalidException();
         }
     }
 

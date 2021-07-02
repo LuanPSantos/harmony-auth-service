@@ -25,7 +25,7 @@ public class CredentialDatabaseGateway implements CredentialGateway {
         return new Credential(
                 new CredentialId(entity.getId()),
                 new Email(entity.getEmail()),
-                new Password(entity.getPassword()),
+                new EncodedPassword(entity.getPassword()),
                 Role.valueOf(entity.getRole())
         );
     }
@@ -39,7 +39,7 @@ public class CredentialDatabaseGateway implements CredentialGateway {
         return new Credential(
                 new CredentialId(entity.getId()),
                 new Email(entity.getEmail()),
-                new Password(entity.getPassword()),
+                new EncodedPassword(entity.getPassword()),
                 Role.valueOf(entity.getRole())
         );
     }
@@ -55,7 +55,7 @@ public class CredentialDatabaseGateway implements CredentialGateway {
         return new Credential(
                 new CredentialId(entity.getId()),
                 new Email(entity.getEmail()),
-                new Password(entity.getPassword()),
+                new EncodedPassword(entity.getPassword()),
                 Role.valueOf(entity.getRole())
         );
     }

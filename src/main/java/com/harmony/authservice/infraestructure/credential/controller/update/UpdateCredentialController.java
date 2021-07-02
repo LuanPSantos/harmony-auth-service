@@ -2,10 +2,7 @@ package com.harmony.authservice.infraestructure.credential.controller.update;
 
 import com.harmony.authservice.app.usecase.UseCase;
 import com.harmony.authservice.app.usecase.credential.update.io.UpdateCredentialInput;
-import com.harmony.authservice.domain.credential.model.Credential;
-import com.harmony.authservice.domain.credential.model.CredentialId;
-import com.harmony.authservice.domain.credential.model.Email;
-import com.harmony.authservice.domain.credential.model.Password;
+import com.harmony.authservice.domain.credential.model.*;
 import com.harmony.authservice.infraestructure.credential.controller.update.request.UpdateCredentialRequest;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
@@ -29,7 +26,7 @@ public class UpdateCredentialController {
                 new Credential(
                         new CredentialId(id),
                         new Email(request.getEmail()),
-                        new Password(request.getPassword())
+                        new RawPassword(request.getPassword())
                 )));
     }
 }

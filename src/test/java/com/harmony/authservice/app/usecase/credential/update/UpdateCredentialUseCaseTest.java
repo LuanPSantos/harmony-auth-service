@@ -3,10 +3,7 @@ package com.harmony.authservice.app.usecase.credential.update;
 import com.harmony.authservice.app.usecase.credential.update.io.UpdateCredentialInput;
 import com.harmony.authservice.domain.credential.gateway.CredentialQueryGateway;
 import com.harmony.authservice.domain.credential.gateway.UpdateCredentialGateway;
-import com.harmony.authservice.domain.credential.model.Credential;
-import com.harmony.authservice.domain.credential.model.Email;
-import com.harmony.authservice.domain.credential.model.Password;
-import com.harmony.authservice.domain.credential.model.Role;
+import com.harmony.authservice.domain.credential.model.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -62,8 +59,7 @@ public class UpdateCredentialUseCaseTest {
 
     @Test
     void ShouldUpdateThePasswordOfCredential() throws Exception {
-        String rawPassword = "newPassword";
-        Password password = new Password(rawPassword);
+        Password password = new RawPassword("newPassword");
 
         ArgumentCaptor<Credential> captor = ArgumentCaptor.forClass(Credential.class);
         doNothing()
@@ -80,7 +76,7 @@ public class UpdateCredentialUseCaseTest {
         Credential credentialCaptured = captor.getValue();
         Assertions.assertEquals(CREDENTIAL_ID, credentialCaptured.getId());
         Assertions.assertEquals(CREDENTIAL_EMAIL, credentialCaptured.getEmail());
-        Assertions.assertTrue(credentialCaptured.getPassword().matches(rawPassword));
+        Assertions.assertTrue(credentialCaptured.getPassword().matches(password));
         Assertions.assertEquals(USER, credentialCaptured.getRole());
     }
 }

@@ -1,27 +1,13 @@
 package com.harmony.authservice.domain.credential.model;
 
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+public abstract class Password {
+    protected final String value;
 
-import javax.persistence.Column;
-import javax.persistence.Embeddable;
-import javax.persistence.Transient;
-import java.util.Objects;
-
-public class Password {
-
-    private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-
-    private final String value;
-
-    public Password(String password) {
-        this.value = password;
+    public Password(String value) {
+        this.value = value;
     }
 
-    public String get() {
-        return value;
-    }
+    public abstract String get();
 
-    public boolean matches(String rawPassword) {
-        return passwordEncoder.matches(rawPassword, value);
-    }
+    public abstract boolean matches(Password password);
 }

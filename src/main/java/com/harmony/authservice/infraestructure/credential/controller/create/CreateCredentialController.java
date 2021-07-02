@@ -4,6 +4,7 @@ import com.harmony.authservice.app.usecase.UseCase;
 import com.harmony.authservice.domain.credential.model.Credential;
 import com.harmony.authservice.domain.credential.model.Email;
 import com.harmony.authservice.domain.credential.model.Password;
+import com.harmony.authservice.domain.credential.model.RawPassword;
 import com.harmony.authservice.infraestructure.credential.controller.create.request.CreateCredentialRequest;
 import com.harmony.authservice.app.usecase.credential.create.io.CreateCredentialInput;
 import com.harmony.authservice.app.usecase.credential.create.io.CreateCredentialOutput;
@@ -34,7 +35,7 @@ public class CreateCredentialController {
         CreateCredentialOutput output = createCredentialUseCase.execute(new CreateCredentialInput(
                 new Credential(
                         new Email(request.getEmail()),
-                        new Password(request.getPassword()),
+                        new RawPassword(request.getPassword()),
                         request.getRole())
         ));
 

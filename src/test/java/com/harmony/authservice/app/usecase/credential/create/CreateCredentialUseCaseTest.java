@@ -4,10 +4,7 @@ import com.harmony.authservice.app.usecase.credential.create.io.CreateCredential
 import com.harmony.authservice.app.usecase.credential.create.io.CreateCredentialOutput;
 import com.harmony.authservice.domain.credential.exception.PasswordInvalidException;
 import com.harmony.authservice.domain.credential.gateway.CreateCredentialGateway;
-import com.harmony.authservice.domain.credential.model.Credential;
-import com.harmony.authservice.domain.credential.model.Email;
-import com.harmony.authservice.domain.credential.model.Password;
-import com.harmony.authservice.domain.credential.model.Role;
+import com.harmony.authservice.domain.credential.model.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.*;
@@ -37,7 +34,7 @@ public class CreateCredentialUseCaseTest {
                 .thenReturn(new Credential(CREDENTIAL_ID,CREDENTIAL_EMAIL, CREDENTIAL_PASSWORD, Role.USER));
 
         CreateCredentialOutput output = createCredentialUseCase
-                .execute(new CreateCredentialInput(new Credential(CREDENTIAL_EMAIL, new Password(RAW_PASSWORD), Role.USER)));
+                .execute(new CreateCredentialInput(new Credential(CREDENTIAL_EMAIL, RAW_PASSWORD, Role.USER)));
 
         Credential credentialCaptured = captor.getValue();
 
@@ -54,9 +51,9 @@ public class CreateCredentialUseCaseTest {
 
         PasswordInvalidException exception = assertThrows(PasswordInvalidException.class, () -> {
             createCredentialUseCase.execute(new CreateCredentialInput(
-                    new Credential(new Email("abc@email.com"), new Password("abc"), Role.USER)));
+                    new Credential(new Email("abc@email.com"), new RawPassword("abc"), Role.USER)));
         });
 
-        assertEquals("A senha não pode ser parte do email", exception.getMessage());
+        assertEquals(PasswordInvalidException.MESSAGE, exception.getMessage());
     }
 }
