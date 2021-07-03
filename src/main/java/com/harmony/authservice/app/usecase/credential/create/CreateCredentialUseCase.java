@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 @Service
 public class CreateCredentialUseCase implements UseCase<CreateCredentialInput, CreateCredentialOutput> {
 
-    private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
     private final CreateCredentialGateway createCredentialGateway;
 
     public CreateCredentialUseCase(CreateCredentialGateway createCredentialGateway) {
@@ -25,14 +24,12 @@ public class CreateCredentialUseCase implements UseCase<CreateCredentialInput, C
     public CreateCredentialOutput execute(CreateCredentialInput input) throws PasswordInvalidException {
         input.getCredential().validate();
 
-        String encodedPassword = passwordEncoder.encode(input.getCredential().getPassword().get());
-
         Credential credential = createCredentialGateway
-                .create(new Credential(
-                        input.getCredential().getEmail(),
-                        new EncodedPassword(encodedPassword),
-                        input.getCredential().getRole()
-                ));
+                .create(new Credential.Builder()
+                        .withEmail(input.getCredential().getEmail())
+                        .withEncodedPassword(input.getCredential().getPassword().get())
+                        .withRole(input.getCredential().getRole())
+                        .build());
 
         return new CreateCredentialOutput(credential.getId());
     }

@@ -22,11 +22,13 @@ public class UpdateCredentialController {
     @PatchMapping("{id}")
     @ResponseStatus(HttpStatus.OK)
     public void update(@PathVariable Long id, @RequestBody UpdateCredentialRequest request) throws Exception {
-        updateCredentialUseCase.execute(new UpdateCredentialInput(
-                new Credential(
-                        new CredentialId(id),
-                        new Email(request.getEmail()),
-                        new RawPassword(request.getPassword())
-                )));
+
+        Credential credential = new Credential.Builder()
+                .withId(id)
+                .withEmail(request.getEmail())
+                .withRawPassword(request.getRawPassword())
+                .build();
+
+        updateCredentialUseCase.execute(new UpdateCredentialInput(credential));
     }
 }

@@ -22,12 +22,12 @@ public class CredentialDatabaseGateway implements CredentialGateway {
                 .findById(id.get())
                 .orElseThrow(CredentialNotFoundException::new);
 
-        return new Credential(
-                new CredentialId(entity.getId()),
-                new Email(entity.getEmail()),
-                new EncodedPassword(entity.getPassword()),
-                Role.valueOf(entity.getRole())
-        );
+        return new Credential.Builder()
+                .withId(entity.getId())
+                .withEmail(entity.getEmail())
+                .withEncodedPassword(entity.getPassword())
+                .withRole(entity.getRole())
+                .build();
     }
 
     @Override
@@ -36,12 +36,12 @@ public class CredentialDatabaseGateway implements CredentialGateway {
                 .findByEmail(email.get())
                 .orElseThrow(CredentialNotFoundException::new);
 
-        return new Credential(
-                new CredentialId(entity.getId()),
-                new Email(entity.getEmail()),
-                new EncodedPassword(entity.getPassword()),
-                Role.valueOf(entity.getRole())
-        );
+        return new Credential.Builder()
+                .withId(entity.getId())
+                .withEmail(entity.getEmail())
+                .withEncodedPassword(entity.getPassword())
+                .withRole(entity.getRole())
+                .build();
     }
 
     @Override
@@ -52,12 +52,12 @@ public class CredentialDatabaseGateway implements CredentialGateway {
                 credential.getRole().name()
         ));
 
-        return new Credential(
-                new CredentialId(entity.getId()),
-                new Email(entity.getEmail()),
-                new EncodedPassword(entity.getPassword()),
-                Role.valueOf(entity.getRole())
-        );
+        return new Credential.Builder()
+                .withId(entity.getId())
+                .withEmail(entity.getEmail())
+                .withEncodedPassword(entity.getPassword())
+                .withRole(entity.getRole())
+                .build();
     }
 
     @Override

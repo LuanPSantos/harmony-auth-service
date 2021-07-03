@@ -31,15 +31,22 @@ public class CreateCredentialUseCaseTest {
 
         ArgumentCaptor<Credential> captor = ArgumentCaptor.forClass(Credential.class);
         when(createCredentialGateway.create(captor.capture()))
-                .thenReturn(new Credential(CREDENTIAL_ID,CREDENTIAL_EMAIL, CREDENTIAL_PASSWORD, Role.USER));
+                .thenReturn(new Credential.Builder()
+                        .withId(CREDENTIAL_ID)
+                        .withEmail(EMAIL)
+                        .withEncodedPassword(ENCODED_PASSWORD)
+                        .withRole(Role.USER).build());
 
         CreateCredentialOutput output = createCredentialUseCase
-                .execute(new CreateCredentialInput(new Credential(CREDENTIAL_EMAIL, RAW_PASSWORD, Role.USER)));
+                .execute(new CreateCredentialInput(new Credential.Builder()
+                        .withEmail(EMAIL)
+                        .withRawPassword(RAW_PASSWORD)
+                        .withRole(Role.USER).build()));
 
         Credential credentialCaptured = captor.getValue();
 
         assertNull(credentialCaptured.getId());
-        assertEquals(CREDENTIAL_EMAIL, credentialCaptured.getEmail());
+        assertEquals(EMAIL, credentialCaptured.getEmail());
         assertTrue(credentialCaptured.getPassword().matches(RAW_PASSWORD));
         assertEquals(Role.USER, credentialCaptured.getRole());
 
@@ -51,7 +58,10 @@ public class CreateCredentialUseCaseTest {
 
         PasswordInvalidException exception = assertThrows(PasswordInvalidException.class, () -> {
             createCredentialUseCase.execute(new CreateCredentialInput(
-                    new Credential(new Email("abc@email.com"), new RawPassword("abc"), Role.USER)));
+                    new Credential.Builder()
+                            .withEmail("abc@email.com")
+                            .withRawPassword("abc")
+                            .withRole(Role.USER).build()));
         });
 
         assertEquals(PasswordInvalidException.MESSAGE, exception.getMessage());

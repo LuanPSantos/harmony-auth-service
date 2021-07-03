@@ -13,10 +13,8 @@ public class AuthorizationUseCase implements UseCase<AuthorizationInput, Authori
 
     private final AuthorizationService authorizationService;
 
-    public AuthorizationUseCase(
-                    @Value("${auth.authorization-token.ttl}")
-                    Long authorizationTokenTimeToLive) {
-        this.authorizationService = new AuthorizationService(authorizationTokenTimeToLive);
+    public AuthorizationUseCase(AuthorizationService authorizationService) {
+        this.authorizationService = authorizationService;
     }
 
     @Override

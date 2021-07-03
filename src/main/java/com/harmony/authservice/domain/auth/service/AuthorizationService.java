@@ -4,14 +4,19 @@ import com.harmony.authservice.domain.auth.exception.ForbiddenException;
 import com.harmony.authservice.domain.auth.model.JWTAuthorization;
 import com.harmony.authservice.domain.credential.model.Role;
 import io.jsonwebtoken.ExpiredJwtException;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import static com.harmony.authservice.domain.auth.model.JWTAuthorization.validateAuthorizationToken;
 
+@Component
 public class AuthorizationService {
 
     private final Long authorizationTokenTimeToLive;
 
-    public AuthorizationService(Long authorizationTokenTimeToLive) {
+    public AuthorizationService(
+            @Value("${auth.authorization-token.ttl}")
+            Long authorizationTokenTimeToLive) {
         this.authorizationTokenTimeToLive = authorizationTokenTimeToLive;
     }
 

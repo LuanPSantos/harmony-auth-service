@@ -4,7 +4,6 @@ import com.harmony.authservice.domain.credential.exception.PasswordInvalidExcept
 import com.harmony.authservice.domain.credential.model.Credential;
 import com.harmony.authservice.domain.credential.model.Email;
 import com.harmony.authservice.domain.credential.model.Password;
-import com.harmony.authservice.domain.credential.model.RawPassword;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -16,7 +15,10 @@ public class CredentialTest {
 
     @Test
     void ShouldUpdateTheEmail() {
-        Credential credential = new Credential(CREDENTIAL_EMAIL, CREDENTIAL_PASSWORD, ADMIN);
+        Credential credential = new Credential.Builder()
+                .withEmail(EMAIL)
+                .withEncodedPassword(ENCODED_PASSWORD)
+                .withRole(ADMIN).build();
         Email newEmail = new Email("new@email.com");
 
         credential.updateEmail(newEmail);
@@ -26,17 +28,23 @@ public class CredentialTest {
 
     @Test
     void ShouldNotUpdateTheEmailGivingNullAsNewEmail() {
-        Credential credential = new Credential(CREDENTIAL_EMAIL, CREDENTIAL_PASSWORD, ADMIN);
+        Credential credential = new Credential.Builder()
+                .withEmail(EMAIL)
+                .withEncodedPassword(ENCODED_PASSWORD)
+                .withRole(ADMIN).build();
 
         credential.updateEmail(null);
 
-        assertEquals(CREDENTIAL_EMAIL, credential.getEmail());
+        assertEquals(EMAIL, credential.getEmail());
     }
 
     @Test
     void ShouldUpdateThePassword() {
-        Credential credential = new Credential(CREDENTIAL_EMAIL, CREDENTIAL_PASSWORD, ADMIN);
-        Password password = new RawPassword("novasenha");
+        Credential credential = new Credential.Builder()
+                .withEmail(EMAIL)
+                .withEncodedPassword(ENCODED_PASSWORD)
+                .withRole(ADMIN).build();
+        Password password = new Password("novasenha");
 
         credential.updatePassword(password);
 
@@ -45,7 +53,10 @@ public class CredentialTest {
 
     @Test
     void ShouldNotUpdateThePasswordGivingNullAsNewPassword() {
-        Credential credential = new Credential(CREDENTIAL_EMAIL, CREDENTIAL_PASSWORD, ADMIN);
+        Credential credential = new Credential.Builder()
+                .withEmail(EMAIL)
+                .withEncodedPassword(ENCODED_PASSWORD)
+                .withRole(ADMIN).build();
 
         credential.updatePassword(null);
 
@@ -54,7 +65,10 @@ public class CredentialTest {
 
     @Test
     void ShouldSuccessfullyValidateTheCredential() throws PasswordInvalidException {
-        Credential credential = new Credential(CREDENTIAL_EMAIL, CREDENTIAL_PASSWORD, ADMIN);
+        Credential credential = new Credential.Builder()
+                .withEmail(EMAIL)
+                .withEncodedPassword(ENCODED_PASSWORD)
+                .withRole(ADMIN).build();
 
         credential.validate();
 
@@ -63,7 +77,10 @@ public class CredentialTest {
 
     @Test
     void ShouldFailureValidateTheCredential() {
-        Credential credential = new Credential(CREDENTIAL_EMAIL, new RawPassword(CREDENTIAL_EMAIL.get()), ADMIN);
+        Credential credential = new Credential.Builder()
+                .withEmail(EMAIL)
+                .withRawPassword(EMAIL.get())
+                .withRole(ADMIN).build();
 
         PasswordInvalidException exception = assertThrows(PasswordInvalidException.class, credential::validate);
 

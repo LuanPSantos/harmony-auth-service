@@ -13,7 +13,7 @@ public class CredentialEntity {
     private String password;
     private String role;
 
-    public CredentialEntity() {
+    private CredentialEntity() {
     }
 
     public CredentialEntity(Long id, String email, String password, String role) {

@@ -7,28 +7,16 @@ import java.util.Objects;
 
 public class Credential {
 
-    private CredentialId id;
+    private final CredentialId id;
     private Email email;
     private Password password;
-    private Role role;
+    private final Role role;
 
-    public Credential(Email email, Password password, Role role) {
-        this.email = email;
-        this.password = password;
-        this.role = role;
-    }
-
-    public Credential(CredentialId id, Email email, Password password, Role role) {
+    private Credential(CredentialId id, Email email, Password password, Role role) {
         this.id = id;
         this.email = email;
         this.password = password;
         this.role = role;
-    }
-
-    public Credential(CredentialId id, Email email, Password password) {
-        this.id = id;
-        this.email = email;
-        this.password = password;
     }
 
     public Role getRole() {
@@ -55,10 +43,10 @@ public class Credential {
 
     public void updatePassword(Password password) {
         if (password != null && password.get() != null) {
-            if (password instanceof RawPassword) {
-                this.password = new EncodedPassword(new BCryptPasswordEncoder().encode(password.get()));
-            } else if (password instanceof EncodedPassword) {
+            if (password instanceof EncodedPassword) {
                 this.password = password;
+            } else {
+                this.password = new EncodedPassword(password.get());
             }
         }
     }
@@ -81,5 +69,67 @@ public class Credential {
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+
+    public static class Builder {
+
+        private CredentialId id;
+        private Email email;
+        private Password password;
+        private Role role;
+
+        public Builder withEmail(String email) {
+            this.email = new Email(email);
+            return this;
+        }
+
+        public Builder withEmail(Email email) {
+            this.email = email;
+            return this;
+        }
+
+        public Builder withRawPassword(String password) {
+            this.password = new Password(password);
+            return this;
+        }
+
+        public Builder withRawPassword(Password password) {
+            this.password = password;
+            return this;
+        }
+
+        public Builder withEncodedPassword(String password) {
+            this.password = new EncodedPassword(password);
+            return this;
+        }
+
+        public Builder withEncodedPassword(EncodedPassword password) {
+            this.password = password;
+            return this;
+        }
+
+        public Builder withRole(Role role) {
+            this.role = role;
+            return this;
+        }
+
+        public Builder withRole(String role) {
+            this.role = Role.valueOf(role);
+            return this;
+        }
+
+        public Builder withId(Long id) {
+            this.id = new CredentialId(id);
+            return this;
+        }
+
+        public Builder withId(CredentialId id) {
+            this.id = id;
+            return this;
+        }
+
+        public Credential build() {
+            return new Credential(id, email, password, role);
+        }
     }
 }

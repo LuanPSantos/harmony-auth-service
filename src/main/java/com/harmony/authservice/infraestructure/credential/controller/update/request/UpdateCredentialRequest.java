@@ -3,13 +3,13 @@ package com.harmony.authservice.infraestructure.credential.controller.update.req
 public class UpdateCredentialRequest {
 
     private String email;
-    private String password;
+    private String rawPassword;
 
     public String getEmail() {
         return email;
     }
 
-    public String getPassword() {
-        return password;
+    public String getRawPassword() {
+        return rawPassword;
     }
 }

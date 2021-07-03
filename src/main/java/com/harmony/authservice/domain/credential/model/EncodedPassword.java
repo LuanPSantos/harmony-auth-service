@@ -4,10 +4,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 public class EncodedPassword extends Password {
 
-    private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-
-    public EncodedPassword(String password) {
-        super(password);
+    public EncodedPassword(String rawPassword) {
+        super(new BCryptPasswordEncoder().encode(rawPassword));
     }
 
     @Override
@@ -17,6 +15,9 @@ public class EncodedPassword extends Password {
 
     @Override
     public boolean matches(Password password) {
-        return passwordEncoder.matches(password.get(), value);
+        if(password instanceof EncodedPassword) {
+            throw new IllegalArgumentException();
+        }
+        return new BCryptPasswordEncoder().matches(password.get(), value);
     }
 }

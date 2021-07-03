@@ -44,10 +44,14 @@ public class AuthenticationUseCaseTest {
     @Test
     void ShouldAuthenticateAnUserWithValidCredential() throws Exception {
 
-        when(credentialQueryGateway.findByEmail(eq(CREDENTIAL_EMAIL)))
-                .thenReturn(new Credential(CREDENTIAL_ID, CREDENTIAL_EMAIL, CREDENTIAL_PASSWORD, Role.USER));
+        when(credentialQueryGateway.findByEmail(eq(EMAIL)))
+                .thenReturn(new Credential.Builder()
+                        .withId(CREDENTIAL_ID)
+                        .withEmail(EMAIL)
+                        .withEncodedPassword(ENCODED_PASSWORD)
+                        .withRole(Role.USER).build());
 
-        AuthenticationOutput output = authenticationUseCase.execute(new AuthenticationInput(CREDENTIAL_EMAIL, RAW_PASSWORD));
+        AuthenticationOutput output = authenticationUseCase.execute(new AuthenticationInput(EMAIL, RAW_PASSWORD));
 
         String emailInAuthorizationTokenSubject = output.getJwtAuthorizationTokenPair().getAuthorization().getEmail();
         Role emailInAuthorizationTokenRole = output.getJwtAuthorizationTokenPair().getAuthorization().getRole();
@@ -55,22 +59,26 @@ public class AuthenticationUseCaseTest {
         String emailInRefreshAuthorizationTokenSubject = output.getJwtAuthorizationTokenPair().getRefreshAuthorization().getEmail();
         Role emailInRefreshAuthorizationTokenRole = output.getJwtAuthorizationTokenPair().getRefreshAuthorization().getRole();
 
-        assertEquals(CREDENTIAL_EMAIL.get(), emailInAuthorizationTokenSubject);
+        assertEquals(EMAIL.get(), emailInAuthorizationTokenSubject);
         assertEquals(Role.USER, emailInAuthorizationTokenRole);
 
-        assertEquals(CREDENTIAL_EMAIL.get(), emailInRefreshAuthorizationTokenSubject);
+        assertEquals(EMAIL.get(), emailInRefreshAuthorizationTokenSubject);
         assertEquals(Role.USER, emailInRefreshAuthorizationTokenRole);
     }
 
     @Test
     void ShouldFailAuthenticationDueInvalidPassword() throws CredentialNotFoundException {
-        RawPassword wrongRawPassword = new RawPassword("wrongRawPassword");
+        Password wrongRawPassword = new Password("wrongRawPassword");
 
-        when(credentialQueryGateway.findByEmail(eq(CREDENTIAL_EMAIL)))
-                .thenReturn(new Credential(CREDENTIAL_ID, CREDENTIAL_EMAIL, CREDENTIAL_PASSWORD, Role.USER));
+        when(credentialQueryGateway.findByEmail(eq(EMAIL)))
+                .thenReturn(new Credential.Builder()
+                        .withId(CREDENTIAL_ID)
+                        .withEmail(EMAIL)
+                        .withEncodedPassword(ENCODED_PASSWORD)
+                        .withRole(Role.USER).build());
 
         AuthenticationException exception = assertThrows(AuthenticationException.class,
-                () -> authenticationUseCase.execute(new AuthenticationInput(CREDENTIAL_EMAIL, wrongRawPassword)));
+                () -> authenticationUseCase.execute(new AuthenticationInput(EMAIL, wrongRawPassword)));
 
         assertEquals(AuthenticationException.MESSAGE, exception.getMessage());
     }

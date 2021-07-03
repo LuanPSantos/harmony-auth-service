@@ -10,7 +10,7 @@ public class CreateCredentialRequest {
     @NotBlank(message = "O campo 'email' não pode ser nulo ou vazio")
     private String email;
     @NotBlank(message = "O campo 'password' não pode ser nulo ou vazio")
-    private String password;
+    private String rawPassword;
     @NotNull(message = "O campo 'role' não pode ser nulo")
     private Role role;
 
@@ -18,8 +18,8 @@ public class CreateCredentialRequest {
         return email;
     }
 
-    public String getPassword() {
-        return password;
+    public String getRawPassword() {
+        return rawPassword;
     }
 
     public Role getRole() {

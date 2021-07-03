@@ -30,14 +30,18 @@ public class FindCredentialByEmailUseCaseTest {
 
     @Test
     void ShouldFindACredentialByEmail() throws Exception {
-        when(credentialQueryGateway.findByEmail(eq(CREDENTIAL_EMAIL)))
-                .thenReturn(new Credential(CREDENTIAL_ID, CREDENTIAL_EMAIL, CREDENTIAL_PASSWORD, Role.USER));
+        when(credentialQueryGateway.findByEmail(eq(EMAIL)))
+                .thenReturn(new Credential.Builder()
+                        .withId(CREDENTIAL_ID)
+                        .withEmail(EMAIL)
+                        .withEncodedPassword(ENCODED_PASSWORD)
+                        .withRole(Role.USER).build());
 
-        FindCredentialByEmailOutput output = findCredentialByEmailUseCase.execute(new FindCredentialByEmailInput(CREDENTIAL_EMAIL));
+        FindCredentialByEmailOutput output = findCredentialByEmailUseCase.execute(new FindCredentialByEmailInput(EMAIL));
 
         assertEquals(CREDENTIAL_ID, output.getCredential().getId());
-        assertEquals(CREDENTIAL_EMAIL, output.getCredential().getEmail());
+        assertEquals(EMAIL, output.getCredential().getEmail());
         assertEquals(Role.USER, output.getCredential().getRole());
-        assertEquals(CREDENTIAL_PASSWORD, output.getCredential().getPassword());
+        assertEquals(ENCODED_PASSWORD, output.getCredential().getPassword());
     }
 }

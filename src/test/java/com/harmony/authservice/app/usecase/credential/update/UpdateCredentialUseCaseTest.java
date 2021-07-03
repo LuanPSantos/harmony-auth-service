@@ -13,8 +13,9 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import static com.harmony.authservice.app.utils.CredentialTestConstants.*;
-import static com.harmony.authservice.domain.credential.model.Role.ADMIN;
 import static com.harmony.authservice.domain.credential.model.Role.USER;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
@@ -43,40 +44,52 @@ public class UpdateCredentialUseCaseTest {
                 .when(updateCredentialGateway)
                 .update(captor.capture());
         when(credentialQueryGateway.findById(eq(CREDENTIAL_ID)))
-                .thenReturn(new Credential(CREDENTIAL_ID, CREDENTIAL_EMAIL, CREDENTIAL_PASSWORD, USER));
+                .thenReturn(new Credential.Builder()
+                        .withId(CREDENTIAL_ID)
+                        .withEmail(EMAIL)
+                        .withEncodedPassword(ENCODED_PASSWORD)
+                        .withRole(USER).build());
 
         updateCredentialUseCase
-                .execute(new UpdateCredentialInput(new Credential(CREDENTIAL_ID, email, null)));
+                .execute(new UpdateCredentialInput(new Credential.Builder()
+                        .withId(CREDENTIAL_ID)
+                        .withEmail(email).build()));
 
         verify(updateCredentialGateway).update(any());
 
         Credential credentialCaptured = captor.getValue();
-        Assertions.assertEquals(CREDENTIAL_ID, credentialCaptured.getId());
-        Assertions.assertEquals(email, credentialCaptured.getEmail());
-        Assertions.assertTrue(credentialCaptured.getPassword().matches(RAW_PASSWORD));
-        Assertions.assertEquals(USER, credentialCaptured.getRole());
+        assertEquals(CREDENTIAL_ID, credentialCaptured.getId());
+        assertEquals(email, credentialCaptured.getEmail());
+        assertTrue(credentialCaptured.getPassword().matches(RAW_PASSWORD));
+        assertEquals(USER, credentialCaptured.getRole());
     }
 
     @Test
     void ShouldUpdateThePasswordOfCredential() throws Exception {
-        Password password = new RawPassword("newPassword");
+        Password password = new Password("newPassword");
 
         ArgumentCaptor<Credential> captor = ArgumentCaptor.forClass(Credential.class);
         doNothing()
                 .when(updateCredentialGateway)
                 .update(captor.capture());
         when(credentialQueryGateway.findById(eq(CREDENTIAL_ID)))
-                .thenReturn(new Credential(CREDENTIAL_ID, CREDENTIAL_EMAIL, CREDENTIAL_PASSWORD, USER));
+                .thenReturn(new Credential.Builder()
+                        .withId(CREDENTIAL_ID)
+                        .withEmail(EMAIL)
+                        .withEncodedPassword(ENCODED_PASSWORD)
+                        .withRole(USER).build());
 
         updateCredentialUseCase
-                .execute(new UpdateCredentialInput(new Credential(CREDENTIAL_ID, null, password)));
+                .execute(new UpdateCredentialInput(new Credential.Builder()
+                        .withId(CREDENTIAL_ID)
+                        .withRawPassword(password).build()));
 
         verify(updateCredentialGateway).update(any());
 
         Credential credentialCaptured = captor.getValue();
-        Assertions.assertEquals(CREDENTIAL_ID, credentialCaptured.getId());
-        Assertions.assertEquals(CREDENTIAL_EMAIL, credentialCaptured.getEmail());
-        Assertions.assertTrue(credentialCaptured.getPassword().matches(password));
-        Assertions.assertEquals(USER, credentialCaptured.getRole());
+        assertEquals(CREDENTIAL_ID, credentialCaptured.getId());
+        assertEquals(EMAIL, credentialCaptured.getEmail());
+        assertTrue(credentialCaptured.getPassword().matches(password));
+        assertEquals(USER, credentialCaptured.getRole());
     }
 }

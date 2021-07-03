@@ -2,9 +2,6 @@ package com.harmony.authservice.infraestructure.credential.controller.create;
 
 import com.harmony.authservice.app.usecase.UseCase;
 import com.harmony.authservice.domain.credential.model.Credential;
-import com.harmony.authservice.domain.credential.model.Email;
-import com.harmony.authservice.domain.credential.model.Password;
-import com.harmony.authservice.domain.credential.model.RawPassword;
 import com.harmony.authservice.infraestructure.credential.controller.create.request.CreateCredentialRequest;
 import com.harmony.authservice.app.usecase.credential.create.io.CreateCredentialInput;
 import com.harmony.authservice.app.usecase.credential.create.io.CreateCredentialOutput;
@@ -32,12 +29,13 @@ public class CreateCredentialController {
 
     @PostMapping
     public ResponseEntity<CreateCredentialOutput> create(@RequestBody @Valid CreateCredentialRequest request) throws Exception {
-        CreateCredentialOutput output = createCredentialUseCase.execute(new CreateCredentialInput(
-                new Credential(
-                        new Email(request.getEmail()),
-                        new RawPassword(request.getPassword()),
-                        request.getRole())
-        ));
+
+        Credential credential = new Credential.Builder()
+                .withEmail(request.getEmail())
+                .withRawPassword(request.getRawPassword())
+                .withRole(request.getRole()).build();
+
+        CreateCredentialOutput output = createCredentialUseCase.execute(new CreateCredentialInput(credential));
 
         URI uri = ServletUriComponentsBuilder
                 .fromCurrentRequest()

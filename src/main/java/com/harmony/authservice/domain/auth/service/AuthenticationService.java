@@ -7,7 +7,7 @@ import com.harmony.authservice.domain.credential.exception.CredentialNotFoundExc
 import com.harmony.authservice.domain.credential.gateway.CredentialQueryGateway;
 import com.harmony.authservice.domain.credential.model.Email;
 import com.harmony.authservice.domain.credential.model.Credential;
-import com.harmony.authservice.domain.credential.model.RawPassword;
+import com.harmony.authservice.domain.credential.model.Password;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -31,7 +31,7 @@ public class AuthenticationService {
         this.refreshAuthorizationTokenTimeToLive = refreshAuthorizationTokenTTL;
     }
 
-    public JWTAuthorizationTokenPair authenticate(Email email, RawPassword rawPassword) throws Exception {
+    public JWTAuthorizationTokenPair authenticate(Email email, Password rawPassword) throws Exception {
         try {
             Credential credential = credentialQueryGateway.findByEmail(email);
 
