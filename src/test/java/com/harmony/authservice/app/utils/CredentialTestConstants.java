@@ -11,4 +11,5 @@ public interface CredentialTestConstants {
     CredentialId CREDENTIAL_ID = new CredentialId(1L);
     Password RAW_PASSWORD = new Password("password");
     EncodedPassword ENCODED_PASSWORD = new EncodedPassword(RAW_PASSWORD.get());
+    Long TTL = 2000L;
 }

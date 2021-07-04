@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.*;
 
 import static com.harmony.authservice.app.utils.CredentialTestConstants.EMAIL;
+import static com.harmony.authservice.app.utils.CredentialTestConstants.TTL;
 import static com.harmony.authservice.domain.auth.model.JWTAuthorization.withEmailAndExpirationTimeAndRole;
 import static com.harmony.authservice.domain.credential.model.Role.ADMIN;
 import static com.harmony.authservice.domain.credential.model.Role.USER;
@@ -21,9 +22,6 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 
 public class AuthorizationUseCaseTest {
-
-    private static final Email CREDENTIAL_EMAIL = new Email("credential@email.com");
-    private static final Long TTL = 2000L;
 
     @Mock
     private AuthorizationService authorizationService;
@@ -39,12 +37,12 @@ public class AuthorizationUseCaseTest {
     @Test
     void ShouldAuthorizeUsingAuthorizationToken() throws Exception {
         JWTAuthorization authorization = withEmailAndExpirationTimeAndRole(
-                CREDENTIAL_EMAIL.get(),
+                EMAIL.get(),
                 TTL,
                 USER
         );
         JWTAuthorization refreshAuthorization = withEmailAndExpirationTimeAndRole(
-                CREDENTIAL_EMAIL.get(),
+                EMAIL.get(),
                 TTL * 2,
                 USER
         );
