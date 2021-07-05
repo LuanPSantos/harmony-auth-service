@@ -3,7 +3,7 @@ package com.harmony.authservice.infraestructure.credential.controller.update;
 import com.harmony.authservice.app.usecase.UseCase;
 import com.harmony.authservice.app.usecase.credential.update.io.UpdateCredentialInput;
 import com.harmony.authservice.domain.credential.model.*;
-import com.harmony.authservice.infraestructure.credential.controller.update.request.UpdateCredentialRequest;
+import com.harmony.authservice.infraestructure.credential.controller.update.io.UpdateCredentialRequest;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;

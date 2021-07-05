@@ -1,4 +1,4 @@
-package com.harmony.authservice.infraestructure.credential.controller.update.request;
+package com.harmony.authservice.infraestructure.credential.controller.update.io;
 
 public class UpdateCredentialRequest {
 

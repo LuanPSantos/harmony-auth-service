@@ -11,6 +11,8 @@ import com.harmony.authservice.app.usecase.credential.create.io.CreateCredential
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import static com.harmony.authservice.domain.credential.model.EncodedPassword.fromRawPassword;
+
 @Service
 public class CreateCredentialUseCase implements UseCase<CreateCredentialInput, CreateCredentialOutput> {
 
@@ -27,7 +29,7 @@ public class CreateCredentialUseCase implements UseCase<CreateCredentialInput, C
         Credential credential = createCredentialGateway
                 .create(new Credential.Builder()
                         .withEmail(input.getCredential().getEmail())
-                        .withEncodedPassword(input.getCredential().getPassword().get())
+                        .withEncodedPassword(fromRawPassword(input.getCredential().getPassword().get()))
                         .withRole(input.getCredential().getRole())
                         .build());
 

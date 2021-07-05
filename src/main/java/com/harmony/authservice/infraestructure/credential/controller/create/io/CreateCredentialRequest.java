@@ -1,4 +1,4 @@
-package com.harmony.authservice.infraestructure.credential.controller.create.request;
+package com.harmony.authservice.infraestructure.credential.controller.create.io;
 
 import com.harmony.authservice.domain.credential.model.Role;
 

@@ -2,9 +2,10 @@ package com.harmony.authservice.infraestructure.credential.controller.create;
 
 import com.harmony.authservice.app.usecase.UseCase;
 import com.harmony.authservice.domain.credential.model.Credential;
-import com.harmony.authservice.infraestructure.credential.controller.create.request.CreateCredentialRequest;
+import com.harmony.authservice.infraestructure.credential.controller.create.io.CreateCredentialRequest;
 import com.harmony.authservice.app.usecase.credential.create.io.CreateCredentialInput;
 import com.harmony.authservice.app.usecase.credential.create.io.CreateCredentialOutput;
+import com.harmony.authservice.infraestructure.credential.controller.create.io.CreateCredentialResponse;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,7 +29,7 @@ public class CreateCredentialController {
     }
 
     @PostMapping
-    public ResponseEntity<CreateCredentialOutput> create(@RequestBody @Valid CreateCredentialRequest request) throws Exception {
+    public ResponseEntity<CreateCredentialResponse> create(@RequestBody @Valid CreateCredentialRequest request) throws Exception {
 
         Credential credential = new Credential.Builder()
                 .withEmail(request.getEmail())
@@ -43,6 +44,6 @@ public class CreateCredentialController {
                 .buildAndExpand(output.getCredentialId().get())
                 .toUri();
 
-        return ResponseEntity.created(uri).body(output);
+        return ResponseEntity.created(uri).body(new CreateCredentialResponse(output.getCredentialId().get()));
     }
 }
