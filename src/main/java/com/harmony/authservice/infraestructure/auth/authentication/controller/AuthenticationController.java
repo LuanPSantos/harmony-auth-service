@@ -47,7 +47,7 @@ public class AuthenticationController {
                 .getRefreshAuthorization().getAuthorization();
         String authorizationToken = output
                 .getJwtAuthorizationTokenPair()
-                .getRefreshAuthorization().asToken();
+                .getAuthorization().asToken();
 
         response.addCookie(createCookie(refreshAuthorizationToken));
 
