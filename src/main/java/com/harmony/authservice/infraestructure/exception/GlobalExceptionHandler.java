@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.sql.SQLException;
 import java.util.Collections;
 
 import static org.springframework.http.HttpStatus.*;
@@ -32,6 +33,13 @@ public class GlobalExceptionHandler {
         ExceptionResponse body = new ExceptionResponse(Collections.singletonList(new Error(exception.getMessage())));
 
         return ResponseEntity.status(NOT_FOUND).body(body);
+    }
+
+    @ExceptionHandler({SQLException.class})
+    public ResponseEntity<ExceptionResponse> handle(SQLException exception) {
+        ExceptionResponse body = new ExceptionResponse(Collections.singletonList(new Error(exception.getMessage())));
+
+        return ResponseEntity.status(BAD_REQUEST).body(body);
     }
 
     @ExceptionHandler({ForbiddenException.class})
