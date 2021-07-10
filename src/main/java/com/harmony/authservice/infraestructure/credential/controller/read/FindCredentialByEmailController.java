@@ -26,7 +26,7 @@ public class FindCredentialByEmailController {
         FindCredentialByEmailOutput output = findCredentialByEmailUseCase.execute(new FindCredentialByEmailInput(new Email(email)));
 
         return new FindCredentialByEmailResponse(
-                output.getCredential().getEmail().get(),
-                output.getCredential().getPassword().get());
+                output.getCredential().getId().get(),
+                output.getCredential().getEmail().get());
     }
 }

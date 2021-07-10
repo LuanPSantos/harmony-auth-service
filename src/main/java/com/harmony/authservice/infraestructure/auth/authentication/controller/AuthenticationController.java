@@ -23,7 +23,7 @@ import javax.servlet.http.HttpServletResponse;
 @RequestMapping("authentications")
 public class AuthenticationController {
 
-    public static final String REFRESH_AUTHORIZATION_COOKIE_KEY = "refreshAuthorization";
+    public static final String REFRESH_AUTHORIZATION_COOKIE_KEY = "refresh-authorization";
 
     @Qualifier("authenticationUseCase")
     private final UseCase<AuthenticationInput, AuthenticationOutput> authenticationUseCase;

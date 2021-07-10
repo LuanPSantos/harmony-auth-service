@@ -2,22 +2,22 @@ package com.harmony.authservice.infraestructure.credential.controller.read.io;
 
 public class FindCredentialByEmailResponse {
 
+    private Long id;
     private String email;
-    private String password;
 
     public FindCredentialByEmailResponse() {
     }
 
-    public FindCredentialByEmailResponse(String email, String password) {
+    public FindCredentialByEmailResponse(Long id, String email) {
+        this.id = id;
         this.email = email;
-        this.password = password;
     }
 
     public String getEmail() {
         return email;
     }
 
-    public String getPassword() {
-        return password;
+    public Long getId() {
+        return id;
     }
 }
