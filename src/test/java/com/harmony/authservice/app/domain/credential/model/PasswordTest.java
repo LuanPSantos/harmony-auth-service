@@ -26,7 +26,7 @@ public class PasswordTest {
 
     @Test
     void ShouldMatchRawPasswordAndEncodedPassword() {
-        Password p1 = new EncodedPassword("abc");
+        Password p1 = EncodedPassword.fromRawPassword("abc");
         Password p2 = new Password("abc");
 
         assertTrue(p1.matches(p2));

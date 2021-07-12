@@ -1,7 +1,7 @@
 package com.harmony.authservice.app.usecase.credential.read;
 
-import com.harmony.authservice.app.usecase.credential.read.io.FindCredentialByEmailInput;
-import com.harmony.authservice.app.usecase.credential.read.io.FindCredentialByEmailOutput;
+import com.harmony.authservice.app.usecase.credential.read.io.FindCredentialByIdInput;
+import com.harmony.authservice.app.usecase.credential.read.io.FindCredentialByIdOutput;
 import com.harmony.authservice.domain.credential.gateway.CredentialQueryGateway;
 import com.harmony.authservice.domain.credential.model.Credential;
 import com.harmony.authservice.domain.credential.model.Role;
@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
-public class FindCredentialByEmailUseCaseTest {
+public class FindCredentialByIdUseCaseTest {
     @Mock
     private CredentialQueryGateway credentialQueryGateway;
 
@@ -29,15 +29,15 @@ public class FindCredentialByEmailUseCaseTest {
     }
 
     @Test
-    void ShouldFindACredentialByEmail() throws Exception {
-        when(credentialQueryGateway.findByEmail(eq(EMAIL)))
+    void ShouldFindACredentialById() throws Exception {
+        when(credentialQueryGateway.findById(eq(CREDENTIAL_ID)))
                 .thenReturn(new Credential.Builder()
                         .withId(CREDENTIAL_ID)
                         .withEmail(EMAIL)
                         .withEncodedPassword(ENCODED_PASSWORD)
                         .withRole(Role.USER).build());
 
-        FindCredentialByEmailOutput output = findCredentialByEmailUseCase.execute(new FindCredentialByEmailInput(EMAIL));
+        FindCredentialByIdOutput output = findCredentialByEmailUseCase.execute(new FindCredentialByIdInput(CREDENTIAL_ID));
 
         assertEquals(CREDENTIAL_ID, output.getCredential().getId());
         assertEquals(EMAIL, output.getCredential().getEmail());

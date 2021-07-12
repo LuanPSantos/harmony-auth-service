@@ -6,8 +6,8 @@ import com.harmony.authservice.domain.auth.service.AuthorizationService;
 import io.jsonwebtoken.ExpiredJwtException;
 import org.junit.jupiter.api.Test;
 
+import static com.harmony.authservice.app.utils.AuthorizationTestConstants.TTL;
 import static com.harmony.authservice.app.utils.CredentialTestConstants.EMAIL;
-import static com.harmony.authservice.app.utils.CredentialTestConstants.TTL;
 import static com.harmony.authservice.domain.auth.model.JWTAuthorization.withEmailAndExpirationTimeAndRole;
 import static com.harmony.authservice.domain.credential.model.Role.ADMIN;
 import static com.harmony.authservice.domain.credential.model.Role.USER;

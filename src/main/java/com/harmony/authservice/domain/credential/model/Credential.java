@@ -46,7 +46,7 @@ public class Credential {
             if (password instanceof EncodedPassword) {
                 this.password = password;
             } else {
-                this.password = new EncodedPassword(password.get());
+                this.password = EncodedPassword.fromRawPassword(password.get());
             }
         }
     }

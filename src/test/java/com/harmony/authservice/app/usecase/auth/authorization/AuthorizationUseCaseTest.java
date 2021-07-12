@@ -2,20 +2,15 @@ package com.harmony.authservice.app.usecase.auth.authorization;
 
 import com.harmony.authservice.app.usecase.auth.authorization.io.AuthorizationInput;
 import com.harmony.authservice.app.usecase.auth.authorization.io.AuthorizationOutput;
-import com.harmony.authservice.app.utils.CredentialTestConstants;
-import com.harmony.authservice.domain.auth.exception.ForbiddenException;
 import com.harmony.authservice.domain.auth.model.JWTAuthorization;
 import com.harmony.authservice.domain.auth.service.AuthorizationService;
-import com.harmony.authservice.domain.credential.model.Email;
-import io.jsonwebtoken.ExpiredJwtException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.*;
 
 import static com.harmony.authservice.app.utils.CredentialTestConstants.EMAIL;
-import static com.harmony.authservice.app.utils.CredentialTestConstants.TTL;
+import static com.harmony.authservice.app.utils.AuthorizationTestConstants.TTL;
 import static com.harmony.authservice.domain.auth.model.JWTAuthorization.withEmailAndExpirationTimeAndRole;
-import static com.harmony.authservice.domain.credential.model.Role.ADMIN;
 import static com.harmony.authservice.domain.credential.model.Role.USER;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.eq;

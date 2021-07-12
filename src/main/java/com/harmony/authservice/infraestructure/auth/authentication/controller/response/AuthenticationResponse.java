@@ -2,22 +2,16 @@ package com.harmony.authservice.infraestructure.auth.authentication.controller.r
 
 public class AuthenticationResponse {
 
-    private String authorizationToken;
-    private String refreshAuthorizationToken;
+    private Long credentialId;
 
     public AuthenticationResponse() {
     }
 
-    public AuthenticationResponse(String authorizationToken, String refreshAuthorizationToken) {
-        this.authorizationToken = authorizationToken;
-        this.refreshAuthorizationToken = refreshAuthorizationToken;
+    public AuthenticationResponse(Long credentialId) {
+        this.credentialId = credentialId;
     }
 
-    public String getAuthorizationToken() {
-        return authorizationToken;
-    }
-
-    public String getRefreshAuthorizationToken() {
-        return refreshAuthorizationToken;
+    public Long getCredentialId() {
+        return credentialId;
     }
 }

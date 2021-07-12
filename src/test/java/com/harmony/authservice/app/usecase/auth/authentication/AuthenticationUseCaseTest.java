@@ -3,6 +3,7 @@ package com.harmony.authservice.app.usecase.auth.authentication;
 import com.harmony.authservice.app.usecase.auth.authentication.io.AuthenticationInput;
 import com.harmony.authservice.app.usecase.auth.authentication.io.AuthenticationOutput;
 import com.harmony.authservice.domain.auth.exception.AuthenticationException;
+import com.harmony.authservice.domain.auth.model.JWTAuthorizationTokenPair;
 import com.harmony.authservice.domain.auth.service.AuthenticationService;
 import com.harmony.authservice.domain.credential.exception.CredentialNotFoundException;
 import com.harmony.authservice.domain.credential.gateway.CredentialQueryGateway;
@@ -11,6 +12,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.*;
 
+import static com.harmony.authservice.app.utils.AuthorizationTestConstants.*;
 import static com.harmony.authservice.app.utils.CredentialTestConstants.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -19,9 +21,10 @@ import static org.mockito.Mockito.when;
 
 public class AuthenticationUseCaseTest {
 
-
     @Mock
     private CredentialQueryGateway credentialQueryGateway;
+    @Mock
+    private AuthenticationService authenticationService;
 
     private AuthenticationUseCase authenticationUseCase;
 
@@ -29,27 +32,23 @@ public class AuthenticationUseCaseTest {
     void setUp() {
         MockitoAnnotations.openMocks(this);
 
-        Long authorizationTokenTTL = 2000L;
-        Long refreshAuthorizationTokenTTL = 2000L;
-
         authenticationUseCase = new AuthenticationUseCase(
-                new AuthenticationService(
-                        credentialQueryGateway,
-                        authorizationTokenTTL,
-                        refreshAuthorizationTokenTTL
-                )
-        );
+                new AuthenticationService(TTL, TTL),
+                credentialQueryGateway);
     }
 
     @Test
     void ShouldAuthenticateAnUserWithValidCredential() throws Exception {
+        Credential credential = new Credential.Builder()
+                .withId(CREDENTIAL_ID)
+                .withEmail(EMAIL)
+                .withEncodedPassword(ENCODED_PASSWORD)
+                .withRole(Role.USER).build();
 
         when(credentialQueryGateway.findByEmail(eq(EMAIL)))
-                .thenReturn(new Credential.Builder()
-                        .withId(CREDENTIAL_ID)
-                        .withEmail(EMAIL)
-                        .withEncodedPassword(ENCODED_PASSWORD)
-                        .withRole(Role.USER).build());
+                .thenReturn(credential);
+        when(authenticationService.authenticate(eq(credential), eq(RAW_PASSWORD)))
+                .thenReturn(new JWTAuthorizationTokenPair(AUTHORIZATION_TOKEN, REFRESH_AUTHORIZATION_TOKEN));
 
         AuthenticationOutput output = authenticationUseCase.execute(new AuthenticationInput(EMAIL, RAW_PASSWORD));
 
@@ -64,23 +63,6 @@ public class AuthenticationUseCaseTest {
 
         assertEquals(EMAIL.get(), emailInRefreshAuthorizationTokenSubject);
         assertEquals(Role.USER, emailInRefreshAuthorizationTokenRole);
-    }
-
-    @Test
-    void ShouldFailAuthenticationDueInvalidPassword() throws CredentialNotFoundException {
-        Password wrongRawPassword = new Password("wrongRawPassword");
-
-        when(credentialQueryGateway.findByEmail(eq(EMAIL)))
-                .thenReturn(new Credential.Builder()
-                        .withId(CREDENTIAL_ID)
-                        .withEmail(EMAIL)
-                        .withEncodedPassword(ENCODED_PASSWORD)
-                        .withRole(Role.USER).build());
-
-        AuthenticationException exception = assertThrows(AuthenticationException.class,
-                () -> authenticationUseCase.execute(new AuthenticationInput(EMAIL, wrongRawPassword)));
-
-        assertEquals(AuthenticationException.MESSAGE, exception.getMessage());
     }
 
     @Test

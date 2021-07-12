@@ -3,9 +3,6 @@ package com.harmony.authservice.domain.auth.service;
 import com.harmony.authservice.domain.auth.exception.AuthenticationException;
 import com.harmony.authservice.domain.auth.model.JWTAuthorizationTokenPair;
 import com.harmony.authservice.domain.auth.model.JWTAuthorization;
-import com.harmony.authservice.domain.credential.exception.CredentialNotFoundException;
-import com.harmony.authservice.domain.credential.gateway.CredentialQueryGateway;
-import com.harmony.authservice.domain.credential.model.Email;
 import com.harmony.authservice.domain.credential.model.Credential;
 import com.harmony.authservice.domain.credential.model.Password;
 import org.springframework.beans.factory.annotation.Value;
@@ -17,38 +14,28 @@ public class AuthenticationService {
     private final Long authorizationTokenTimeToLive;
     private final Long refreshAuthorizationTokenTimeToLive;
 
-    private final CredentialQueryGateway credentialQueryGateway;
-
     public AuthenticationService(
-            CredentialQueryGateway credentialQueryGateway,
             @Value("${auth.authorization-token.ttl}")
-            Long authorizationTokenTTL,
+                    Long authorizationTokenTTL,
             @Value("${auth.refresh-authorization-token.ttl}")
-            Long refreshAuthorizationTokenTTL
+                    Long refreshAuthorizationTokenTTL
     ) {
-        this.credentialQueryGateway = credentialQueryGateway;
         this.authorizationTokenTimeToLive = authorizationTokenTTL;
         this.refreshAuthorizationTokenTimeToLive = refreshAuthorizationTokenTTL;
     }
 
-    public JWTAuthorizationTokenPair authenticate(Email email, Password rawPassword) throws Exception {
-        try {
-            Credential credential = credentialQueryGateway.findByEmail(email);
+    public JWTAuthorizationTokenPair authenticate(Credential credential, Password rawPassword) throws Exception {
+        if (credential.getPassword().matches(rawPassword)) {
+            JWTAuthorization authorization = createAuthorizationFor(credential);
+            JWTAuthorization refreshAuthorization = createRefreshAuthorizationFor(credential);
 
-            if (credential.getPassword().matches(rawPassword)) {
-                JWTAuthorization authorization = createAuthorizationFor(credential);
-                JWTAuthorization refreshAuthorization = createRefreshAuthorizationFor(credential);
-
-                return new JWTAuthorizationTokenPair(
-                        authorization,
-                        refreshAuthorization
-                );
-            }
-
-            throw new AuthenticationException();
-        } catch (CredentialNotFoundException exception) {
-            throw new AuthenticationException();
+            return new JWTAuthorizationTokenPair(
+                    authorization,
+                    refreshAuthorization
+            );
         }
+
+        throw new AuthenticationException();
     }
 
     private JWTAuthorization createAuthorizationFor(Credential credential) {

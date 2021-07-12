@@ -6,6 +6,7 @@ import com.harmony.authservice.app.usecase.UseCase;
 import com.harmony.authservice.domain.credential.model.Email;
 import com.harmony.authservice.domain.credential.model.Password;
 import com.harmony.authservice.infraestructure.auth.authentication.controller.request.AuthenticationRequest;
+import com.harmony.authservice.infraestructure.auth.authentication.controller.response.AuthenticationResponse;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -33,7 +34,7 @@ public class AuthenticationController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> authenticate(
+    public ResponseEntity<AuthenticationResponse> authenticate(
             @RequestBody AuthenticationRequest request,
             HttpServletResponse response) throws Exception {
 
@@ -54,7 +55,7 @@ public class AuthenticationController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .header(HttpHeaders.AUTHORIZATION, authorizationToken)
-                .build();
+                .body(new AuthenticationResponse(output.getCredentialId().get()));
     }
 
     private Cookie createCookie(String refreshAuthorizationToken) {
