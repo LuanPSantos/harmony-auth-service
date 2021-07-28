@@ -7,6 +7,7 @@ import com.harmony.authservice.domain.auth.exception.ForbiddenException;
 import com.harmony.authservice.domain.credential.exception.CredentialNotFoundException;
 import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -19,13 +20,30 @@ import static org.springframework.http.HttpStatus.*;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler({
-            ExpiredJwtException.class,
             AuthenticationException.class
     })
     public ResponseEntity<ExceptionResponse> handle(Exception exception) {
         ExceptionResponse body = new ExceptionResponse(Collections.singletonList(new Error(exception.getMessage())));
 
         return ResponseEntity.status(UNAUTHORIZED).body(body);
+    }
+
+    @ExceptionHandler({
+            ExpiredJwtException.class,
+    })
+    public ResponseEntity<ExceptionResponse> handle(ExpiredJwtException exception) {
+        ExceptionResponse body = new ExceptionResponse(Collections.singletonList(new Error("Deu ruim... tenta logar de novo ;)")));
+
+        return ResponseEntity.status(UNAUTHORIZED).body(body);
+    }
+
+    @ExceptionHandler({
+            MethodArgumentNotValidException.class,
+    })
+    public ResponseEntity<ExceptionResponse> handle(MethodArgumentNotValidException exception) {
+        ExceptionResponse body = new ExceptionResponse(Collections.singletonList(new Error("Vê se você preencheu tudo certinho e tenta de novo!")));
+
+        return ResponseEntity.status(BAD_REQUEST).body(body);
     }
 
     @ExceptionHandler({CredentialNotFoundException.class})

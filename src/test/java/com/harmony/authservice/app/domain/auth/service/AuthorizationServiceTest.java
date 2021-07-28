@@ -18,7 +18,7 @@ public class AuthorizationServiceTest {
     private final AuthorizationService authorizationService = new AuthorizationService(TTL);
 
     @Test
-    void ShouldAuthorizeWithAuthorizationToken() throws ForbiddenException {
+    void ShouldAuthorizeWithAuthorizationToken() throws Exception {
         JWTAuthorization authorization = withEmailAndExpirationTimeAndRole(
                 EMAIL.get(),
                 TTL,
@@ -38,7 +38,7 @@ public class AuthorizationServiceTest {
     }
 
     @Test
-    void ShouldAuthorizeWithRefreshAuthorizationToken() throws ForbiddenException, InterruptedException {
+    void ShouldAuthorizeWithRefreshAuthorizationToken() throws Exception {
         JWTAuthorization authorization = withEmailAndExpirationTimeAndRole(
                 EMAIL.get(),
                 TTL,
