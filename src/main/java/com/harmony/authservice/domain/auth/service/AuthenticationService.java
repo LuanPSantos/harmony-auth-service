@@ -39,7 +39,7 @@ public class AuthenticationService {
     }
 
     private JWTAuthorization createAuthorizationFor(Credential credential) {
-        return JWTAuthorization.withEmailAndExpirationTimeAndRole(
+        return new JWTAuthorization(
                 credential.getEmail().get(),
                 authorizationTokenTimeToLive,
                 credential.getRole()
@@ -47,7 +47,7 @@ public class AuthenticationService {
     }
 
     private JWTAuthorization createRefreshAuthorizationFor(Credential credential) {
-        return JWTAuthorization.withEmailAndExpirationTimeAndRole(
+        return new JWTAuthorization(
                 credential.getEmail().get(),
                 refreshAuthorizationTokenTimeToLive,
                 credential.getRole()

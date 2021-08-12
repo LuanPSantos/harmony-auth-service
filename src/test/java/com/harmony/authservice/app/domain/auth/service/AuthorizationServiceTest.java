@@ -8,7 +8,6 @@ import org.junit.jupiter.api.Test;
 
 import static com.harmony.authservice.app.utils.AuthorizationTestConstants.TTL;
 import static com.harmony.authservice.app.utils.CredentialTestConstants.EMAIL;
-import static com.harmony.authservice.domain.auth.model.JWTAuthorization.withEmailAndExpirationTimeAndRole;
 import static com.harmony.authservice.domain.credential.model.Role.ADMIN;
 import static com.harmony.authservice.domain.credential.model.Role.USER;
 import static org.junit.jupiter.api.Assertions.*;
@@ -19,12 +18,12 @@ public class AuthorizationServiceTest {
 
     @Test
     void ShouldAuthorizeWithAuthorizationToken() throws Exception {
-        JWTAuthorization authorization = withEmailAndExpirationTimeAndRole(
+        JWTAuthorization authorization = new JWTAuthorization(
                 EMAIL.get(),
                 TTL,
                 USER
         );
-        JWTAuthorization refreshAuthorization = withEmailAndExpirationTimeAndRole(
+        JWTAuthorization refreshAuthorization = new JWTAuthorization(
                 EMAIL.get(),
                 TTL * 2,
                 USER
@@ -39,13 +38,13 @@ public class AuthorizationServiceTest {
 
     @Test
     void ShouldAuthorizeWithRefreshAuthorizationToken() throws Exception {
-        JWTAuthorization authorization = withEmailAndExpirationTimeAndRole(
+        JWTAuthorization authorization = new JWTAuthorization(
                 EMAIL.get(),
                 TTL,
                 USER
         );
         Thread.sleep(TTL);
-        JWTAuthorization refreshAuthorization = withEmailAndExpirationTimeAndRole(
+        JWTAuthorization refreshAuthorization = new JWTAuthorization(
                 EMAIL.get(),
                 TTL * 2,
                 USER
@@ -60,12 +59,12 @@ public class AuthorizationServiceTest {
 
     @Test
     void ShouldNotAuthorizeDueRefreshAuthorizationExpired() throws InterruptedException {
-        JWTAuthorization authorization = withEmailAndExpirationTimeAndRole(
+        JWTAuthorization authorization = new JWTAuthorization(
                 EMAIL.get(),
                 TTL,
                 USER
         );
-        JWTAuthorization refreshAuthorization = withEmailAndExpirationTimeAndRole(
+        JWTAuthorization refreshAuthorization = new JWTAuthorization(
                 EMAIL.get(),
                 TTL,
                 USER
@@ -78,12 +77,12 @@ public class AuthorizationServiceTest {
 
     @Test
     void ShouldNotAuthorizeDueWrongRole() {
-        JWTAuthorization authorization = withEmailAndExpirationTimeAndRole(
+        JWTAuthorization authorization = new JWTAuthorization(
                 EMAIL.get(),
                 TTL,
                 USER
         );
-        JWTAuthorization refreshAuthorization = withEmailAndExpirationTimeAndRole(
+        JWTAuthorization refreshAuthorization = new JWTAuthorization(
                 EMAIL.get(),
                 TTL * 2,
                 USER

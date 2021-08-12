@@ -12,18 +12,16 @@ public class JWTAuthorization {
 
     private final String authorization;
 
-    public JWTAuthorization(String authorization) {
-        JWTTokens.checkTokenSignature(authorization);
+    public JWTAuthorization(String email, Long expirationTime, Role role) {
+        this.authorization = generateAuthorization(email, role, expirationTime);
+    }
 
+    private JWTAuthorization(String authorization) {
         this.authorization = authorization;
     }
 
-    public static JWTAuthorization withEmailAndExpirationTimeAndRole(String email, Long expirationTime, Role role) {
-        return new JWTAuthorization(generateAuthorization(email, role, expirationTime));
-    }
-
-    public static JWTAuthorization validateAuthorizationToken(String authorizationToken) {
-        String authorization = removingPrefix(authorizationToken);
+    public static JWTAuthorization fromAuthorizationToken(String authorizationToken) {
+        String authorization = removePrefix(authorizationToken);
 
         JWTTokens.checkTokenSignature(authorization);
 
@@ -56,7 +54,7 @@ public class JWTAuthorization {
         return JWTTokens.generateJwtToken(email, timeToLive, new SimpleEntry<>(ROLE_FIELD, role));
     }
 
-    private static String removingPrefix(String token) {
+    private static String removePrefix(String token) {
         return token.replace(AUTHORIZATION_BEARER_PREFIX, "");
     }
 

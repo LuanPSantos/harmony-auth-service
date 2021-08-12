@@ -8,6 +8,7 @@ import static com.harmony.authservice.domain.credential.model.Role.USER;
 public interface AuthorizationTestConstants {
 
     Long TTL = 2000L;
-    JWTAuthorization AUTHORIZATION_TOKEN = JWTAuthorization.withEmailAndExpirationTimeAndRole(EMAIL.get(), TTL, USER);
-    JWTAuthorization REFRESH_AUTHORIZATION_TOKEN = JWTAuthorization.withEmailAndExpirationTimeAndRole(EMAIL.get(), TTL, USER);;
+    JWTAuthorization AUTHORIZATION_TOKEN = new JWTAuthorization(EMAIL.get(), TTL, USER);
+    JWTAuthorization REFRESH_AUTHORIZATION_TOKEN = new JWTAuthorization(EMAIL.get(), TTL, USER);
+    ;
 }

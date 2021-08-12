@@ -14,37 +14,37 @@ public class JWTAuthorizationTest {
     @Test
     void ShouldWithEmailAndExpirationTimeAndRole() {
 
-        JWTAuthorization authorization = JWTAuthorization.withEmailAndExpirationTimeAndRole(EMAIL, TTL, USER);
+        JWTAuthorization authorization = new JWTAuthorization(EMAIL, TTL, USER);
 
         Assertions.assertNotNull(authorization);
     }
 
     @Test
     void ShouldValidateAuthorizationToken() {
-        String token = JWTAuthorization.withEmailAndExpirationTimeAndRole(EMAIL, TTL, USER).asToken();
+        String token = new JWTAuthorization(EMAIL, TTL, USER).asToken();
 
-        JWTAuthorization authorization = JWTAuthorization.validateAuthorizationToken(token);
+        JWTAuthorization authorization = JWTAuthorization.fromAuthorizationToken(token);
 
         Assertions.assertNotNull(authorization);
     }
 
     @Test
     void ShouldGetEmailFromAuthorizationToken() {
-        JWTAuthorization authorization = JWTAuthorization.withEmailAndExpirationTimeAndRole(EMAIL, TTL, USER);
+        JWTAuthorization authorization = new JWTAuthorization(EMAIL, TTL, USER);
 
         Assertions.assertEquals(EMAIL, authorization.getEmail());
     }
 
     @Test
     void ShouldGetRoleFromAuthorizationToken() {
-        JWTAuthorization authorization = JWTAuthorization.withEmailAndExpirationTimeAndRole(EMAIL, TTL, USER);
+        JWTAuthorization authorization = new JWTAuthorization(EMAIL, TTL, USER);
 
         Assertions.assertEquals(USER, authorization.getRole());
     }
 
     @Test
     void ShouldGetAuthorizationAsToken() {
-        JWTAuthorization authorization = JWTAuthorization.withEmailAndExpirationTimeAndRole(EMAIL, TTL, USER);
+        JWTAuthorization authorization = new JWTAuthorization(EMAIL, TTL, USER);
 
         Assertions.assertTrue(authorization.asToken().startsWith("Bearer"));
     }
