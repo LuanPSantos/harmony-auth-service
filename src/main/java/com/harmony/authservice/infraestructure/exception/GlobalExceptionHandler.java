@@ -1,6 +1,6 @@
 package com.harmony.authservice.infraestructure.exception;
 
-import com.harmony.authservice.domain.credential.exception.PasswordNotMatchedException;
+import com.harmony.authservice.domain.credential.exception.PasswordDidNotMatchException;
 import com.harmony.authservice.infraestructure.exception.model.Error;
 import com.harmony.authservice.infraestructure.exception.response.ExceptionResponse;
 import com.harmony.authservice.domain.auth.exception.AuthenticationException;
@@ -48,9 +48,9 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler({
-            PasswordNotMatchedException.class
+            PasswordDidNotMatchException.class
     })
-    public ResponseEntity<ExceptionResponse> handle(PasswordNotMatchedException exception) {
+    public ResponseEntity<ExceptionResponse> handle(PasswordDidNotMatchException exception) {
         ExceptionResponse body = new ExceptionResponse(Collections.singletonList(new Error(exception.getMessage())));
 
         return ResponseEntity.status(BAD_REQUEST).body(body);
