@@ -21,10 +21,11 @@ import java.net.URI;
 @RequestMapping("credentials")
 public class CreateCredentialController {
 
-    @Qualifier("createCredentialUseCase")
     private final UseCase<CreateCredentialInput, CreateCredentialOutput> createCredentialUseCase;
 
-    public CreateCredentialController(UseCase<CreateCredentialInput, CreateCredentialOutput> createCredentialUseCase) {
+    public CreateCredentialController(
+            @Qualifier("createCredentialUseCase")
+            UseCase<CreateCredentialInput, CreateCredentialOutput> createCredentialUseCase) {
         this.createCredentialUseCase = createCredentialUseCase;
     }
 

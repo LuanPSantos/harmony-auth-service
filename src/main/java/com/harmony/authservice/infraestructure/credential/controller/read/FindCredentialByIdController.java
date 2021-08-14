@@ -14,10 +14,11 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("credentials")
 public class FindCredentialByIdController {
 
-    @Qualifier("findCredentialByIdUseCase")
     private final UseCase<FindCredentialByIdInput, FindCredentialByIdOutput> findCredentialByIdUseCase;
 
-    public FindCredentialByIdController(UseCase<FindCredentialByIdInput, FindCredentialByIdOutput> findCredentialByIdUseCase) {
+    public FindCredentialByIdController(
+            @Qualifier("findCredentialByIdUseCase")
+            UseCase<FindCredentialByIdInput, FindCredentialByIdOutput> findCredentialByIdUseCase) {
         this.findCredentialByIdUseCase = findCredentialByIdUseCase;
     }
 

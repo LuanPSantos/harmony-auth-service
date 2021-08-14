@@ -8,11 +8,11 @@ import com.harmony.authservice.app.usecase.credential.read.io.FindCredentialById
 import org.springframework.stereotype.Service;
 
 @Service
-public class FindCredentialByEmailUseCase implements UseCase<FindCredentialByIdInput, FindCredentialByIdOutput> {
+public class FindCredentialByIdUseCase implements UseCase<FindCredentialByIdInput, FindCredentialByIdOutput> {
 
     private final CredentialQueryGateway credentialQueryGateway;
 
-    public FindCredentialByEmailUseCase(CredentialQueryGateway credentialQueryGateway) {
+    public FindCredentialByIdUseCase(CredentialQueryGateway credentialQueryGateway) {
         this.credentialQueryGateway = credentialQueryGateway;
     }
 

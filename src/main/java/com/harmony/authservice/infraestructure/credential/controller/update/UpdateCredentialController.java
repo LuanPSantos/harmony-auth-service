@@ -12,10 +12,11 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("credentials")
 public class UpdateCredentialController {
 
-    @Qualifier("updateCredentialUseCase")
     private final UseCase<UpdateCredentialInput, Void> updateCredentialUseCase;
 
-    public UpdateCredentialController(UseCase<UpdateCredentialInput, Void> updateCredentialUseCase) {
+    public UpdateCredentialController(
+            @Qualifier("updateCredentialUseCase")
+            UseCase<UpdateCredentialInput, Void> updateCredentialUseCase) {
         this.updateCredentialUseCase = updateCredentialUseCase;
     }
 
@@ -29,6 +30,6 @@ public class UpdateCredentialController {
                 .withRawPassword(request.getRawPassword())
                 .build();
 
-        updateCredentialUseCase.execute(new UpdateCredentialInput(credential));
+        updateCredentialUseCase.execute(new UpdateCredentialInput(credential, new Password(request.getOldRawPassword())));
     }
 }

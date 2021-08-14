@@ -21,7 +21,7 @@ public class FindCredentialByIdUseCaseTest {
     private CredentialQueryGateway credentialQueryGateway;
 
     @InjectMocks
-    private FindCredentialByEmailUseCase findCredentialByEmailUseCase;
+    private FindCredentialByIdUseCase findCredentialByIdUseCase;
 
     @BeforeEach
     void setUp() {
@@ -37,7 +37,7 @@ public class FindCredentialByIdUseCaseTest {
                         .withEncodedPassword(ENCODED_PASSWORD)
                         .withRole(Role.USER).build());
 
-        FindCredentialByIdOutput output = findCredentialByEmailUseCase.execute(new FindCredentialByIdInput(CREDENTIAL_ID));
+        FindCredentialByIdOutput output = findCredentialByIdUseCase.execute(new FindCredentialByIdInput(CREDENTIAL_ID));
 
         assertEquals(CREDENTIAL_ID, output.getCredential().getId());
         assertEquals(EMAIL, output.getCredential().getEmail());

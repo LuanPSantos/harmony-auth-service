@@ -11,10 +11,11 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("credentials")
 public class DeleteCredentialController {
 
-    @Qualifier("deleteCredentialUseCase")
     private final UseCase<DeleteCredentialInput, Void> deleteCredentialUseCase;
 
-    public DeleteCredentialController(UseCase<DeleteCredentialInput, Void> deleteCredentialUseCase) {
+    public DeleteCredentialController(
+            @Qualifier("deleteCredentialUseCase")
+            UseCase<DeleteCredentialInput, Void> deleteCredentialUseCase) {
         this.deleteCredentialUseCase = deleteCredentialUseCase;
     }
 

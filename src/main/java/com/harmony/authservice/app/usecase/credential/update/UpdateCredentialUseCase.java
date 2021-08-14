@@ -1,11 +1,12 @@
 package com.harmony.authservice.app.usecase.credential.update;
 
 import com.harmony.authservice.app.usecase.UseCase;
+import com.harmony.authservice.domain.credential.exception.CredentialNotFoundException;
+import com.harmony.authservice.domain.credential.exception.PasswordNotMatchedException;
 import com.harmony.authservice.domain.credential.gateway.CredentialQueryGateway;
 import com.harmony.authservice.domain.credential.gateway.UpdateCredentialGateway;
 import com.harmony.authservice.domain.credential.model.Credential;
 import com.harmony.authservice.app.usecase.credential.update.io.UpdateCredentialInput;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -22,14 +23,18 @@ public class UpdateCredentialUseCase implements UseCase<UpdateCredentialInput, V
     }
 
     @Override
-    public Void execute(UpdateCredentialInput input) throws Exception {
+    public Void execute(UpdateCredentialInput input) throws PasswordNotMatchedException, CredentialNotFoundException {
 
         Credential credential = credentialQueryGateway.findById(input.getCredential().getId());
 
-        credential.updateEmail(input.getCredential().getEmail());
-        credential.updatePassword(input.getCredential().getPassword());
+        if (credential.getPassword().matches(input.getOldRawPassword())) {
+            credential.updateEmail(input.getCredential().getEmail());
+            credential.updatePassword(input.getCredential().getPassword());
 
-        updateCredentialGateway.update(credential);
+            updateCredentialGateway.update(credential);
+        } else {
+            throw new PasswordNotMatchedException();
+        }
 
         return null;
     }

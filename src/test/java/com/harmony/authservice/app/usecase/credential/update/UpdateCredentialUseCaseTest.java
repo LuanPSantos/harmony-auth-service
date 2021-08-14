@@ -4,7 +4,6 @@ import com.harmony.authservice.app.usecase.credential.update.io.UpdateCredential
 import com.harmony.authservice.domain.credential.gateway.CredentialQueryGateway;
 import com.harmony.authservice.domain.credential.gateway.UpdateCredentialGateway;
 import com.harmony.authservice.domain.credential.model.*;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -53,7 +52,7 @@ public class UpdateCredentialUseCaseTest {
         updateCredentialUseCase
                 .execute(new UpdateCredentialInput(new Credential.Builder()
                         .withId(CREDENTIAL_ID)
-                        .withEmail(email).build()));
+                        .withEmail(email).build(), rawPassword));
 
         verify(updateCredentialGateway).update(any());
 
@@ -82,7 +81,7 @@ public class UpdateCredentialUseCaseTest {
         updateCredentialUseCase
                 .execute(new UpdateCredentialInput(new Credential.Builder()
                         .withId(CREDENTIAL_ID)
-                        .withRawPassword(password).build()));
+                        .withRawPassword(password).build(), rawPassword));
 
         verify(updateCredentialGateway).update(any());
 
