@@ -66,12 +66,19 @@ public class CredentialDatabaseGateway implements CredentialGateway {
     }
 
     @Override
-    public void update(Credential credential) {
-        credentialRepository.save(new CredentialEntity(
+    public Credential update(Credential credential) {
+        CredentialEntity entity = credentialRepository.save(new CredentialEntity(
                 credential.getId().get(),
                 credential.getEmail().get(),
                 credential.getPassword().get(),
                 credential.getRole().name()
         ));
+
+        return new Credential.Builder()
+                .withId(entity.getId())
+                .withEmail(entity.getEmail())
+                .withEncodedPassword(entity.getPassword())
+                .withRole(entity.getRole())
+                .build();
     }
 }

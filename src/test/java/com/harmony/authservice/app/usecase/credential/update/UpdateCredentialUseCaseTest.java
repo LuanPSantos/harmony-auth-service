@@ -1,6 +1,7 @@
 package com.harmony.authservice.app.usecase.credential.update;
 
 import com.harmony.authservice.app.usecase.credential.update.io.UpdateCredentialInput;
+import com.harmony.authservice.app.usecase.credential.update.io.UpdateCredentialOutput;
 import com.harmony.authservice.domain.credential.exception.PasswordDidNotMatchException;
 import com.harmony.authservice.domain.credential.gateway.CredentialQueryGateway;
 import com.harmony.authservice.domain.credential.gateway.UpdateCredentialGateway;
@@ -39,9 +40,12 @@ public class UpdateCredentialUseCaseTest {
         Email email = new Email("abc@email");
 
         ArgumentCaptor<Credential> captor = ArgumentCaptor.forClass(Credential.class);
-        doNothing()
-                .when(updateCredentialGateway)
-                .update(captor.capture());
+        when(updateCredentialGateway.update(captor.capture()))
+                .thenReturn(new Credential.Builder()
+                        .withId(CREDENTIAL_ID)
+                        .withEmail(email)
+                        .withEncodedPassword(ENCODED_PASSWORD)
+                        .withRole(USER).build());
         when(credentialQueryGateway.findById(eq(CREDENTIAL_ID)))
                 .thenReturn(new Credential.Builder()
                         .withId(CREDENTIAL_ID)
@@ -49,7 +53,7 @@ public class UpdateCredentialUseCaseTest {
                         .withEncodedPassword(ENCODED_PASSWORD)
                         .withRole(USER).build());
 
-        updateCredentialUseCase
+        UpdateCredentialOutput output = updateCredentialUseCase
                 .execute(new UpdateCredentialInput(new Credential.Builder()
                         .withId(CREDENTIAL_ID)
                         .withEmail(email).build(), RAW_PASSWORD));
@@ -61,6 +65,12 @@ public class UpdateCredentialUseCaseTest {
         assertEquals(email, credentialCaptured.getEmail());
         assertTrue(credentialCaptured.getPassword().matches(RAW_PASSWORD));
         assertEquals(USER, credentialCaptured.getRole());
+
+        Credential returnedCredential = output.getCredential();
+        assertEquals(CREDENTIAL_ID, returnedCredential.getId());
+        assertEquals(email, returnedCredential.getEmail());
+        assertTrue(returnedCredential.getPassword().matches(RAW_PASSWORD));
+        assertEquals(USER, returnedCredential.getRole());
     }
 
     @Test
@@ -68,9 +78,12 @@ public class UpdateCredentialUseCaseTest {
         Password password = new Password("newPassword");
 
         ArgumentCaptor<Credential> captor = ArgumentCaptor.forClass(Credential.class);
-        doNothing()
-                .when(updateCredentialGateway)
-                .update(captor.capture());
+        when(updateCredentialGateway.update(captor.capture()))
+                .thenReturn(new Credential.Builder()
+                        .withId(CREDENTIAL_ID)
+                        .withEmail(EMAIL)
+                        .withEncodedPassword(EncodedPassword.fromRawPassword(password.get()))
+                        .withRole(USER).build());
         when(credentialQueryGateway.findById(eq(CREDENTIAL_ID)))
                 .thenReturn(new Credential.Builder()
                         .withId(CREDENTIAL_ID)
@@ -78,7 +91,7 @@ public class UpdateCredentialUseCaseTest {
                         .withEncodedPassword(ENCODED_PASSWORD)
                         .withRole(USER).build());
 
-        updateCredentialUseCase
+        UpdateCredentialOutput output = updateCredentialUseCase
                 .execute(new UpdateCredentialInput(new Credential.Builder()
                         .withId(CREDENTIAL_ID)
                         .withRawPassword(password).build(), RAW_PASSWORD));
@@ -90,15 +103,18 @@ public class UpdateCredentialUseCaseTest {
         assertEquals(EMAIL, credentialCaptured.getEmail());
         assertTrue(credentialCaptured.getPassword().matches(password));
         assertEquals(USER, credentialCaptured.getRole());
+
+        Credential returnedCredential = output.getCredential();
+        assertEquals(CREDENTIAL_ID, returnedCredential.getId());
+        assertEquals(EMAIL, returnedCredential.getEmail());
+        assertTrue(returnedCredential.getPassword().matches(password));
+        assertEquals(USER, returnedCredential.getRole());
     }
 
     @Test
     void ShouldNotUpdateCredentialWhenCurrentPasswordIsWrong() throws Exception {
         Password password = new Password("newPassword");
 
-        doNothing()
-                .when(updateCredentialGateway)
-                .update(any());
         when(credentialQueryGateway.findById(eq(CREDENTIAL_ID)))
                 .thenReturn(new Credential.Builder()
                         .withId(CREDENTIAL_ID)

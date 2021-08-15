@@ -39,7 +39,8 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler({
-            MethodArgumentNotValidException.class
+            MethodArgumentNotValidException.class,
+            IllegalArgumentException.class
     })
     public ResponseEntity<ExceptionResponse> handle(MethodArgumentNotValidException exception) {
         ExceptionResponse body = new ExceptionResponse(Collections.singletonList(new Error("Vê se você preencheu tudo certinho e tenta de novo!")));
