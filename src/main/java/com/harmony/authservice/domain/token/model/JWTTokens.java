@@ -1,4 +1,4 @@
-package com.harmony.authservice.domain.auth.model;
+package com.harmony.authservice.domain.token.model;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
@@ -15,13 +15,24 @@ public class JWTTokens {
 
     static final String SECRET = "MySecret";
 
-    public static <T> String generateJwtToken(String subject, Long timeToLive, Map.Entry<String, T> customField) {
-        return Jwts.builder()
-                .setSubject(subject)
-                .claim(customField.getKey(), customField.getValue())
-                .setExpiration(new Date(System.currentTimeMillis() + timeToLive))
-                .signWith(SignatureAlgorithm.HS512, getEncodedSecret())
-                .compact();
+    public static <T> Token generateJwtToken(String subject, Long timeToLive, Map.Entry<String, T> customField) {
+        return new Token(
+                Jwts.builder()
+                        .setSubject(subject)
+                        .claim(customField.getKey(), customField.getValue())
+                        .setExpiration(new Date(System.currentTimeMillis() + timeToLive))
+                        .signWith(SignatureAlgorithm.HS512, getEncodedSecret())
+                        .compact()
+        );
+    }
+
+    public static Token generateJwtToken(Long timeToLive) {
+        return new Token(
+                Jwts.builder()
+                        .setExpiration(new Date(System.currentTimeMillis() + timeToLive))
+                        .signWith(SignatureAlgorithm.HS512, getEncodedSecret())
+                        .compact()
+        );
     }
 
     public static String extractSubjectFromJwtToken(String token) {

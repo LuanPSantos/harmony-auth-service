@@ -16,9 +16,9 @@ public class AuthenticationService {
 
     public AuthenticationService(
             @Value("${auth.authorization-token.ttl}")
-                    Long authorizationTokenTTL,
+            Long authorizationTokenTTL,
             @Value("${auth.refresh-authorization-token.ttl}")
-                    Long refreshAuthorizationTokenTTL
+            Long refreshAuthorizationTokenTTL
     ) {
         this.authorizationTokenTimeToLive = authorizationTokenTTL;
         this.refreshAuthorizationTokenTimeToLive = refreshAuthorizationTokenTTL;

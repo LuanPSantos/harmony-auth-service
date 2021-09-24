@@ -1,6 +1,6 @@
 package com.harmony.authservice.app.domain.auth.model;
 
-import com.harmony.authservice.domain.auth.model.JWTTokens;
+import com.harmony.authservice.domain.token.model.JWTTokens;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -17,14 +17,14 @@ public class JWTTokensTest {
 
     @Test
     void ShouldGenerateAJWTToken() {
-        String jwt = JWTTokens.generateJwtToken(SUBJECT, TTL,CUSTOM_FIELDS);
+        String jwt = JWTTokens.generateJwtToken(SUBJECT, TTL,CUSTOM_FIELDS).toString();
 
         Assertions.assertNotNull(jwt);
     }
 
     @Test
     void ShouldGetSubjectAndCustomFieldFromJWT() {
-        String jwt = JWTTokens.generateJwtToken(SUBJECT, TTL,CUSTOM_FIELDS);
+        String jwt = JWTTokens.generateJwtToken(SUBJECT, TTL,CUSTOM_FIELDS).toString();
 
         String subject = JWTTokens.extractSubjectFromJwtToken(jwt);
         String customValue = JWTTokens.extractCustomFieldFromJwtToken(jwt, KEY);
@@ -35,7 +35,7 @@ public class JWTTokensTest {
 
     @Test
     void ShouldValidateJWTSignature() {
-        String jwt = JWTTokens.generateJwtToken(SUBJECT, TTL,CUSTOM_FIELDS);
+        String jwt = JWTTokens.generateJwtToken(SUBJECT, TTL,CUSTOM_FIELDS).toString();
 
         JWTTokens.checkTokenSignature(jwt);
 

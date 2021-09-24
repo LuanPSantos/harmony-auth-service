@@ -1,6 +1,7 @@
 package com.harmony.authservice.domain.auth.model;
 
 import com.harmony.authservice.domain.credential.model.Role;
+import com.harmony.authservice.domain.token.model.JWTTokens;
 
 import java.util.AbstractMap.SimpleEntry;
 import java.util.Objects;
@@ -51,7 +52,7 @@ public class JWTAuthorization {
     }
 
     private static String generateAuthorization(String email, Role role, Long timeToLive) {
-        return JWTTokens.generateJwtToken(email, timeToLive, new SimpleEntry<>(ROLE_FIELD, role));
+        return JWTTokens.generateJwtToken(email, timeToLive, new SimpleEntry<>(ROLE_FIELD, role)).toString();
     }
 
     private static String removePrefix(String token) {
