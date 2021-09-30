@@ -4,6 +4,6 @@ public interface CredentialGateway extends
         CreateCredentialGateway,
         CredentialQueryGateway,
         DeleteCredentialGateway,
-        UpdateCredentialGateway {
+        SaveCredentialGateway {
 
 }

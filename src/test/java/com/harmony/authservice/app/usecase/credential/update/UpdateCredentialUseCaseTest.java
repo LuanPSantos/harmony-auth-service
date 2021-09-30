@@ -4,7 +4,7 @@ import com.harmony.authservice.app.usecase.credential.update.io.UpdateCredential
 import com.harmony.authservice.app.usecase.credential.update.io.UpdateCredentialOutput;
 import com.harmony.authservice.domain.credential.exception.PasswordDidNotMatchException;
 import com.harmony.authservice.domain.credential.gateway.CredentialQueryGateway;
-import com.harmony.authservice.domain.credential.gateway.UpdateCredentialGateway;
+import com.harmony.authservice.domain.credential.gateway.SaveCredentialGateway;
 import com.harmony.authservice.domain.credential.model.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -23,7 +23,7 @@ import static org.mockito.Mockito.*;
 public class UpdateCredentialUseCaseTest {
 
     @Mock
-    private UpdateCredentialGateway updateCredentialGateway;
+    private SaveCredentialGateway saveCredentialGateway;
     @Mock
     private CredentialQueryGateway credentialQueryGateway;
 
@@ -40,7 +40,7 @@ public class UpdateCredentialUseCaseTest {
         Email email = new Email("abc@email");
 
         ArgumentCaptor<Credential> captor = ArgumentCaptor.forClass(Credential.class);
-        when(updateCredentialGateway.update(captor.capture()))
+        when(saveCredentialGateway.save(captor.capture()))
                 .thenReturn(new Credential.Builder()
                         .withId(CREDENTIAL_ID)
                         .withEmail(email)
@@ -58,7 +58,7 @@ public class UpdateCredentialUseCaseTest {
                         .withId(CREDENTIAL_ID)
                         .withEmail(email).build(), RAW_PASSWORD));
 
-        verify(updateCredentialGateway).update(any());
+        verify(saveCredentialGateway).save(any());
 
         Credential credentialCaptured = captor.getValue();
         assertEquals(CREDENTIAL_ID, credentialCaptured.getId());
@@ -78,7 +78,7 @@ public class UpdateCredentialUseCaseTest {
         Password password = new Password("newPassword");
 
         ArgumentCaptor<Credential> captor = ArgumentCaptor.forClass(Credential.class);
-        when(updateCredentialGateway.update(captor.capture()))
+        when(saveCredentialGateway.save(captor.capture()))
                 .thenReturn(new Credential.Builder()
                         .withId(CREDENTIAL_ID)
                         .withEmail(EMAIL)
@@ -96,7 +96,7 @@ public class UpdateCredentialUseCaseTest {
                         .withId(CREDENTIAL_ID)
                         .withRawPassword(password).build(), RAW_PASSWORD));
 
-        verify(updateCredentialGateway).update(any());
+        verify(saveCredentialGateway).save(any());
 
         Credential credentialCaptured = captor.getValue();
         assertEquals(CREDENTIAL_ID, credentialCaptured.getId());
@@ -129,6 +129,6 @@ public class UpdateCredentialUseCaseTest {
                             .withRawPassword(password).build(), password));
         });
 
-        verify(updateCredentialGateway, times(0)).update(any());
+        verify(saveCredentialGateway, times(0)).save(any());
     }
 }

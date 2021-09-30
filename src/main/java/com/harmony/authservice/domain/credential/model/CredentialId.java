@@ -10,8 +10,13 @@ public class CredentialId {
         this.value = value;
     }
 
-    public Long get() {
+    public Long toLong() {
         return value;
+    }
+
+    @Override
+    public String toString() {
+        return value.toString();
     }
 
     @Override

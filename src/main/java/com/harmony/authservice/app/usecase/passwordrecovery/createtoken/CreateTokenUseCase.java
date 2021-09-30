@@ -20,9 +20,10 @@ public class CreateTokenUseCase implements UseCase<CreateTokenInput, Void> {
 
     public CreateTokenUseCase(
             @Value("${password-recovery-token.ttl}")
-                    Long recoveryTokenTTL,
+            Long recoveryTokenTTL,
             CredentialQueryGateway credentialQueryGateway,
-            TokenCreatedEventEmitter tokenCreatedEventEmitter) {
+            TokenCreatedEventEmitter tokenCreatedEventEmitter
+    ) {
         this.authorizationTokenTTL = recoveryTokenTTL;
         this.credentialQueryGateway = credentialQueryGateway;
         this.tokenCreatedEventEmitter = tokenCreatedEventEmitter;
@@ -35,11 +36,11 @@ public class CreateTokenUseCase implements UseCase<CreateTokenInput, Void> {
 
             Credential credential = credentialQueryGateway.findByEmail(input.getEmail());
 
-            Token token = JWTTokens.generateJwtToken(authorizationTokenTTL);
+            Token token = JWTTokens.generateJwtToken(credential.getId().toString(), authorizationTokenTTL);
 
             tokenCreatedEventEmitter.send(token, credential.getEmail());
 
-        }catch (CredentialNotFoundException exception) {
+        } catch (CredentialNotFoundException exception) {
             exception.printStackTrace();
         }
 

@@ -24,7 +24,7 @@ public class JWTAuthorization {
     public static JWTAuthorization fromAuthorizationToken(String authorizationToken) {
         String authorization = removePrefix(authorizationToken);
 
-        JWTTokens.checkTokenSignature(authorization);
+        JWTTokens.validateToken(authorization);
 
         return new JWTAuthorization(authorization);
     }

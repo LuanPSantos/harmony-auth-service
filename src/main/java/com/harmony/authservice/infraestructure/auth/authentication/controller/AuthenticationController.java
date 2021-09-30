@@ -55,7 +55,7 @@ public class AuthenticationController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .header(HttpHeaders.AUTHORIZATION, authorizationToken)
-                .body(new AuthenticationResponse(output.getCredentialId().get()));
+                .body(new AuthenticationResponse(output.getCredentialId().toLong()));
     }
 
     private Cookie createCookie(String refreshAuthorizationToken) {

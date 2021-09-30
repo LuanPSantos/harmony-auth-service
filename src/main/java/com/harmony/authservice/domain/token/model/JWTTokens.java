@@ -26,9 +26,10 @@ public class JWTTokens {
         );
     }
 
-    public static Token generateJwtToken(Long timeToLive) {
+    public static Token generateJwtToken(String subject, Long timeToLive) {
         return new Token(
                 Jwts.builder()
+                        .setSubject(subject)
                         .setExpiration(new Date(System.currentTimeMillis() + timeToLive))
                         .signWith(SignatureAlgorithm.HS512, getEncodedSecret())
                         .compact()
@@ -45,7 +46,7 @@ public class JWTTokens {
         return getClaims(token).getBody().get(key, String.class);
     }
 
-    public static void checkTokenSignature(String token) {
+    public static void validateToken(String token) {
         getClaims(token);
     }
 

@@ -1,7 +1,6 @@
 package com.harmony.authservice.domain.credential.model;
 
 import com.harmony.authservice.domain.credential.exception.PasswordInvalidException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.Objects;
 

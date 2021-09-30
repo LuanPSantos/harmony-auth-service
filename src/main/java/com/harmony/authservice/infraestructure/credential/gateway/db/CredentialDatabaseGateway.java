@@ -19,7 +19,7 @@ public class CredentialDatabaseGateway implements CredentialGateway {
     @Override
     public Credential findById(CredentialId id) throws CredentialNotFoundException {
         CredentialEntity entity = credentialRepository
-                .findById(id.get())
+                .findById(id.toLong())
                 .orElseThrow(CredentialNotFoundException::new);
 
         return new Credential.Builder()
@@ -62,13 +62,13 @@ public class CredentialDatabaseGateway implements CredentialGateway {
 
     @Override
     public void deleteById(CredentialId id) {
-        credentialRepository.deleteById(id.get());
+        credentialRepository.deleteById(id.toLong());
     }
 
     @Override
-    public Credential update(Credential credential) {
+    public Credential save(Credential credential) {
         CredentialEntity entity = credentialRepository.save(new CredentialEntity(
-                credential.getId().get(),
+                credential.getId().toLong(),
                 credential.getEmail().get(),
                 credential.getPassword().get(),
                 credential.getRole().name()

@@ -5,7 +5,7 @@ import com.harmony.authservice.app.usecase.credential.update.io.UpdateCredential
 import com.harmony.authservice.domain.credential.exception.CredentialNotFoundException;
 import com.harmony.authservice.domain.credential.exception.PasswordDidNotMatchException;
 import com.harmony.authservice.domain.credential.gateway.CredentialQueryGateway;
-import com.harmony.authservice.domain.credential.gateway.UpdateCredentialGateway;
+import com.harmony.authservice.domain.credential.gateway.SaveCredentialGateway;
 import com.harmony.authservice.domain.credential.model.Credential;
 import com.harmony.authservice.app.usecase.credential.update.io.UpdateCredentialInput;
 import org.springframework.stereotype.Service;
@@ -14,13 +14,13 @@ import org.springframework.stereotype.Service;
 public class UpdateCredentialUseCase implements UseCase<UpdateCredentialInput, UpdateCredentialOutput> {
 
     private final CredentialQueryGateway credentialQueryGateway;
-    private final UpdateCredentialGateway updateCredentialGateway;
+    private final SaveCredentialGateway saveCredentialGateway;
 
     public UpdateCredentialUseCase(
             CredentialQueryGateway credentialQueryGateway,
-            UpdateCredentialGateway updateCredentialGateway) {
+            SaveCredentialGateway saveCredentialGateway) {
         this.credentialQueryGateway = credentialQueryGateway;
-        this.updateCredentialGateway = updateCredentialGateway;
+        this.saveCredentialGateway = saveCredentialGateway;
     }
 
     @Override
@@ -33,7 +33,7 @@ public class UpdateCredentialUseCase implements UseCase<UpdateCredentialInput, U
             credential.updatePassword(input.getCredential().getPassword());
 
             return new UpdateCredentialOutput(
-                    updateCredentialGateway.update(credential)
+                    saveCredentialGateway.save(credential)
             );
         } else {
             throw new PasswordDidNotMatchException();

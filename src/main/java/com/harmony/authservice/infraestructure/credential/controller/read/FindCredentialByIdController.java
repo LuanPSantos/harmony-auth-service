@@ -4,7 +4,6 @@ import com.harmony.authservice.app.usecase.UseCase;
 import com.harmony.authservice.app.usecase.credential.read.io.FindCredentialByIdInput;
 import com.harmony.authservice.app.usecase.credential.read.io.FindCredentialByIdOutput;
 import com.harmony.authservice.domain.credential.model.CredentialId;
-import com.harmony.authservice.domain.credential.model.Email;
 import com.harmony.authservice.infraestructure.credential.controller.read.io.FindCredentialByEmailResponse;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
@@ -28,7 +27,7 @@ public class FindCredentialByIdController {
         FindCredentialByIdOutput output = findCredentialByIdUseCase.execute(new FindCredentialByIdInput(new CredentialId(id)));
 
         return new FindCredentialByEmailResponse(
-                output.getCredential().getId().get(),
+                output.getCredential().getId().toLong(),
                 output.getCredential().getEmail().get());
     }
 }

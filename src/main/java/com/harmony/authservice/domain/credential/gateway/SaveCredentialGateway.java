@@ -2,7 +2,7 @@ package com.harmony.authservice.domain.credential.gateway;
 
 import com.harmony.authservice.domain.credential.model.Credential;
 
-public interface UpdateCredentialGateway {
+public interface SaveCredentialGateway {
 
-    Credential update(Credential credential);
+    Credential save(Credential credential);
 }

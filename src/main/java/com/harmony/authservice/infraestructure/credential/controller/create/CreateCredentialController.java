@@ -42,9 +42,9 @@ public class CreateCredentialController {
         URI uri = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{id}")
-                .buildAndExpand(output.getCredentialId().get())
+                .buildAndExpand(output.getCredentialId().toLong())
                 .toUri();
 
-        return ResponseEntity.created(uri).body(new CreateCredentialResponse(output.getCredentialId().get()));
+        return ResponseEntity.created(uri).body(new CreateCredentialResponse(output.getCredentialId().toLong()));
     }
 }
