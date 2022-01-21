@@ -8,7 +8,10 @@ import com.harmony.authservice.domain.credential.gateway.CredentialQueryGateway;
 import com.harmony.authservice.domain.credential.gateway.SaveCredentialGateway;
 import com.harmony.authservice.domain.credential.model.Credential;
 import com.harmony.authservice.app.usecase.credential.update.io.UpdateCredentialInput;
+import com.harmony.authservice.domain.credential.model.EncodedPassword;
 import org.springframework.stereotype.Service;
+
+import static com.harmony.authservice.domain.credential.model.EncodedPassword.encodeRawPassword;
 
 @Service
 public class UpdateCredentialUseCase implements UseCase<UpdateCredentialInput, UpdateCredentialOutput> {
@@ -26,11 +29,14 @@ public class UpdateCredentialUseCase implements UseCase<UpdateCredentialInput, U
     @Override
     public UpdateCredentialOutput execute(UpdateCredentialInput input) throws PasswordDidNotMatchException, CredentialNotFoundException {
 
-        Credential credential = credentialQueryGateway.findById(input.getCredential().getId());
+        Credential credential = credentialQueryGateway.findById(input.getId());
 
         if (credential.getPassword().matches(input.getOldRawPassword())) {
-            credential.updateEmail(input.getCredential().getEmail());
-            credential.updatePassword(input.getCredential().getPassword());
+            credential.updateEmail(input.getEmail());
+
+            if(input.getNewRawPassword() != null && input.getNewRawPassword().get() != null){
+                credential.updatePassword(encodeRawPassword(input.getNewRawPassword()));
+            }
 
             return new UpdateCredentialOutput(
                     saveCredentialGateway.save(credential)

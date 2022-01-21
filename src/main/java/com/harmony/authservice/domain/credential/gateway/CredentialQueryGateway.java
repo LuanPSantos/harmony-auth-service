@@ -5,8 +5,10 @@ import com.harmony.authservice.domain.credential.model.CredentialId;
 import com.harmony.authservice.domain.credential.model.Email;
 import com.harmony.authservice.domain.credential.exception.CredentialNotFoundException;
 
+import java.util.Optional;
+
 public interface CredentialQueryGateway {
     Credential findById(CredentialId id) throws CredentialNotFoundException;
 
-    Credential findByEmail(Email email) throws CredentialNotFoundException;
+    Optional<Credential> findByEmail(Email email);
 }

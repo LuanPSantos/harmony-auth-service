@@ -6,9 +6,12 @@ import com.harmony.authservice.domain.credential.gateway.CredentialQueryGateway;
 import com.harmony.authservice.domain.credential.gateway.SaveCredentialGateway;
 import com.harmony.authservice.domain.credential.model.Credential;
 import com.harmony.authservice.domain.credential.model.CredentialId;
+import com.harmony.authservice.domain.credential.model.EncodedPassword;
 import com.harmony.authservice.domain.token.model.JWTTokens;
 import com.harmony.authservice.domain.token.model.Token;
 import org.springframework.stereotype.Component;
+
+import static com.harmony.authservice.domain.credential.model.EncodedPassword.encodeRawPassword;
 
 @Component
 public class CreatePasswordUseCase implements UseCase<CreatePasswordInput, Void> {
@@ -30,7 +33,7 @@ public class CreatePasswordUseCase implements UseCase<CreatePasswordInput, Void>
 
         Credential credential = credentialQueryGateway.findById(credentialId);
 
-        credential.updatePassword(input.getPassword());
+        credential.updatePassword(encodeRawPassword(input.getPassword()));
 
         saveCredentialGateway.save(credential);
 

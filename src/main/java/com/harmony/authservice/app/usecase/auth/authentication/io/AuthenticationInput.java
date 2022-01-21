@@ -1,13 +1,13 @@
 package com.harmony.authservice.app.usecase.auth.authentication.io;
 
 import com.harmony.authservice.domain.credential.model.Email;
-import com.harmony.authservice.domain.credential.model.Password;
+import com.harmony.authservice.domain.credential.model.RawPassword;
 
 public class AuthenticationInput {
     private final Email email;
-    private final Password rawPassword;
+    private final RawPassword rawPassword;
 
-    public AuthenticationInput(Email email, Password rawPassword) {
+    public AuthenticationInput(Email email, RawPassword rawPassword) {
         this.email = email;
         this.rawPassword = rawPassword;
     }
@@ -16,7 +16,7 @@ public class AuthenticationInput {
         return email;
     }
 
-    public Password getRawPassword() {
+    public RawPassword getRawPassword() {
         return rawPassword;
     }
 }

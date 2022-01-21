@@ -28,13 +28,13 @@ public class UpdateCredentialController {
     @ResponseStatus(HttpStatus.OK)
     public UpdateCredentialResponse update(@PathVariable Long id, @RequestBody @Valid UpdateCredentialRequest request) throws Exception {
 
-        Credential credential = new Credential.Builder()
-                .withId(id)
-                .withEmail(request.getEmail())
-                .withRawPassword(request.getRawPassword())
-                .build();
-
-        UpdateCredentialOutput output = updateCredentialUseCase.execute(new UpdateCredentialInput(credential, new Password(request.getOldRawPassword())));
+        UpdateCredentialOutput output = updateCredentialUseCase.execute(
+                new UpdateCredentialInput(
+                        new RawPassword(request.getOldRawPassword()),
+                        new CredentialId(id),
+                        new Email(request.getEmail()),
+                        new RawPassword(request.getRawPassword())
+                ));
 
         return new UpdateCredentialResponse(output.getCredential().getEmail().toString());
     }

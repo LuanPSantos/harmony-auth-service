@@ -12,6 +12,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.*;
 
+import java.util.Optional;
+
 import static com.harmony.authservice.app.utils.AuthorizationTestConstants.*;
 import static com.harmony.authservice.app.utils.CredentialTestConstants.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -46,7 +48,7 @@ public class AuthenticationUseCaseTest {
                 .withRole(Role.USER).build();
 
         when(credentialQueryGateway.findByEmail(eq(EMAIL)))
-                .thenReturn(credential);
+                .thenReturn(Optional.of(credential));
         when(authenticationService.authenticate(eq(credential), eq(RAW_PASSWORD)))
                 .thenReturn(new JWTAuthorizationTokenPair(AUTHORIZATION_TOKEN, REFRESH_AUTHORIZATION_TOKEN));
 
@@ -66,11 +68,11 @@ public class AuthenticationUseCaseTest {
     }
 
     @Test
-    void ShouldFailAuthenticationDuneInvalidEmail() throws CredentialNotFoundException {
+    void ShouldFailAuthenticationDuneInvalidEmail() {
         Email nonExistentEmail = new Email("nonExistentEmail@email.com");
 
         when(credentialQueryGateway.findByEmail(eq(nonExistentEmail)))
-                .thenThrow(CredentialNotFoundException.class);
+                .thenReturn(Optional.empty());
 
         AuthenticationException exception = assertThrows(AuthenticationException.class,
                 () -> authenticationUseCase.execute(new AuthenticationInput(nonExistentEmail, RAW_PASSWORD)));

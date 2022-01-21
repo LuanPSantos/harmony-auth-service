@@ -11,9 +11,12 @@ import org.mockito.*;
 
 import static com.harmony.authservice.app.utils.CredentialTestConstants.*;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 
 public class CreateCredentialUseCaseTest {
+
+    private final static int ZERO = 0;
 
     @Mock
     private CreateCredentialGateway createCredentialGateway;
@@ -38,10 +41,7 @@ public class CreateCredentialUseCaseTest {
                         .withRole(Role.USER).build());
 
         CreateCredentialOutput output = createCredentialUseCase
-                .execute(new CreateCredentialInput(new Credential.Builder()
-                        .withEmail(EMAIL)
-                        .withRawPassword(RAW_PASSWORD)
-                        .withRole(Role.USER).build()));
+                .execute(new CreateCredentialInput(EMAIL, RAW_PASSWORD, Role.USER));
 
         Credential credentialCaptured = captor.getValue();
 
@@ -55,15 +55,15 @@ public class CreateCredentialUseCaseTest {
 
     @Test
     void ShouldNotCreateACredentialDuePasswordContainingEmail() {
-
-        PasswordInvalidException exception = assertThrows(PasswordInvalidException.class, () -> {
-            createCredentialUseCase.execute(new CreateCredentialInput(
-                    new Credential.Builder()
-                            .withEmail("abc@email.com")
-                            .withRawPassword("abc")
-                            .withRole(Role.USER).build()));
-        });
+        PasswordInvalidException exception = assertThrows(PasswordInvalidException.class, () ->
+                createCredentialUseCase.execute(new CreateCredentialInput(
+                        new Email("abc@email.com"),
+                        new RawPassword("abc"),
+                        Role.USER))
+        );
 
         assertEquals(PasswordInvalidException.MESSAGE, exception.getMessage());
+
+        verify(createCredentialGateway, times(ZERO)).create(any());
     }
 }

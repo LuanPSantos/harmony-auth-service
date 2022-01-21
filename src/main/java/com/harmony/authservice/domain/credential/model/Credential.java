@@ -1,17 +1,15 @@
 package com.harmony.authservice.domain.credential.model;
 
-import com.harmony.authservice.domain.credential.exception.PasswordInvalidException;
-
 import java.util.Objects;
 
 public class Credential {
 
     private final CredentialId id;
     private Email email;
-    private Password password;
+    private EncodedPassword password;
     private final Role role;
 
-    private Credential(CredentialId id, Email email, Password password, Role role) {
+    private Credential(CredentialId id, Email email, EncodedPassword password, Role role) {
         this.id = id;
         this.email = email;
         this.password = password;
@@ -36,24 +34,13 @@ public class Credential {
         }
     }
 
-    public Password getPassword() {
+    public EncodedPassword getPassword() {
         return password;
     }
 
-    public void updatePassword(Password password) {
-        if (password != null && password.get() != null) {
-            if (password instanceof EncodedPassword) {
-                this.password = password;
-            } else {
-                this.password = EncodedPassword.fromRawPassword(password.get());
-            }
-        }
-    }
-
-    // TODO tá feio esse validate aqui - vou ver se tiro pra outra classe
-    public void validate() throws PasswordInvalidException {
-        if (email.get().contains(password.get())) {
-            throw new PasswordInvalidException();
+    public void updatePassword(EncodedPassword password) {
+        if (password != null) {
+            this.password = password;
         }
     }
 
@@ -74,7 +61,7 @@ public class Credential {
 
         private CredentialId id;
         private Email email;
-        private Password password;
+        private EncodedPassword password;
         private Role role;
 
         public Builder withEmail(String email) {
@@ -84,16 +71,6 @@ public class Credential {
 
         public Builder withEmail(Email email) {
             this.email = email;
-            return this;
-        }
-
-        public Builder withRawPassword(String password) {
-            this.password = new Password(password);
-            return this;
-        }
-
-        public Builder withRawPassword(Password password) {
-            this.password = password;
             return this;
         }
 

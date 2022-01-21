@@ -2,26 +2,23 @@ package com.harmony.authservice.domain.credential.model;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-public class EncodedPassword extends Password {
+public class EncodedPassword {
 
-    public EncodedPassword(String encodedPassword) {
-        super(encodedPassword);
+    private final String value;
+
+    public EncodedPassword(String value) {
+        this.value = value;
     }
 
-    public static EncodedPassword fromRawPassword(String rawPassword) {
-        return new EncodedPassword(new BCryptPasswordEncoder().encode(rawPassword));
+    public static EncodedPassword encodeRawPassword(RawPassword rawPassword) {
+        return new EncodedPassword(new BCryptPasswordEncoder().encode(rawPassword.get()));
     }
 
-    @Override
     public String get() {
         return value;
     }
 
-    @Override
-    public boolean matches(Password password) {
-        if(password instanceof EncodedPassword) {
-            throw new IllegalArgumentException();
-        }
+    public boolean matches(RawPassword password) {
         return new BCryptPasswordEncoder().matches(password.get(), value);
     }
 }

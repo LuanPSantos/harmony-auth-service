@@ -2,7 +2,7 @@ package com.harmony.authservice.infraestructure.passwordrecovery.createpassword.
 
 import com.harmony.authservice.app.usecase.UseCase;
 import com.harmony.authservice.app.usecase.passwordrecovery.createpassword.io.CreatePasswordInput;
-import com.harmony.authservice.domain.credential.model.Password;
+import com.harmony.authservice.domain.credential.model.RawPassword;
 import com.harmony.authservice.domain.token.model.Token;
 import com.harmony.authservice.infraestructure.passwordrecovery.createpassword.controller.io.CreatePasswordRequest;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,6 +21,6 @@ public class CreatePasswordController {
 
     @PostMapping("passwords")
     public void create(@RequestHeader("X-Password-Recovery-Token") String token, @RequestBody CreatePasswordRequest request) throws Exception {
-        createPasswordUseCase.execute(new CreatePasswordInput(new Token(token), new Password(request.getPassword())));
+        createPasswordUseCase.execute(new CreatePasswordInput(new Token(token), new RawPassword(request.getPassword())));
     }
 }

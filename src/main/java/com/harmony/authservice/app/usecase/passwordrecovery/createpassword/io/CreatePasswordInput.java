@@ -1,13 +1,13 @@
 package com.harmony.authservice.app.usecase.passwordrecovery.createpassword.io;
 
-import com.harmony.authservice.domain.credential.model.Password;
+import com.harmony.authservice.domain.credential.model.RawPassword;
 import com.harmony.authservice.domain.token.model.Token;
 
 public class CreatePasswordInput {
     private final Token passwordRecoveryToken;
-    private final Password password;
+    private final RawPassword password;
 
-    public CreatePasswordInput(Token passwordRecoveryToken, Password password) {
+    public CreatePasswordInput(Token passwordRecoveryToken, RawPassword password) {
         this.passwordRecoveryToken = passwordRecoveryToken;
         this.password = password;
     }
@@ -16,7 +16,7 @@ public class CreatePasswordInput {
         return passwordRecoveryToken;
     }
 
-    public Password getPassword() {
+    public RawPassword getPassword() {
         return password;
     }
 }

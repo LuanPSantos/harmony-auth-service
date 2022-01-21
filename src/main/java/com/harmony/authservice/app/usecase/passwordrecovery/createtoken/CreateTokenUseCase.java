@@ -2,7 +2,7 @@ package com.harmony.authservice.app.usecase.passwordrecovery.createtoken;
 
 import com.harmony.authservice.domain.credential.exception.CredentialNotFoundException;
 import com.harmony.authservice.domain.credential.model.Credential;
-import com.harmony.authservice.domain.token.gateway.TokenCreatedEventEmitter;
+import com.harmony.authservice.domain.token.gateway.TokenCreatedEventGateway;
 import com.harmony.authservice.app.usecase.UseCase;
 import com.harmony.authservice.app.usecase.passwordrecovery.createtoken.io.CreateTokenInput;
 import com.harmony.authservice.domain.token.model.JWTTokens;
@@ -15,34 +15,30 @@ import org.springframework.stereotype.Service;
 public class CreateTokenUseCase implements UseCase<CreateTokenInput, Void> {
 
     private final CredentialQueryGateway credentialQueryGateway;
-    private final TokenCreatedEventEmitter tokenCreatedEventEmitter;
+    private final TokenCreatedEventGateway tokenCreatedEventGateway;
     private final Long authorizationTokenTTL;
 
     public CreateTokenUseCase(
             @Value("${password-recovery-token.ttl}")
-            Long recoveryTokenTTL,
+                    Long recoveryTokenTTL,
             CredentialQueryGateway credentialQueryGateway,
-            TokenCreatedEventEmitter tokenCreatedEventEmitter
+            TokenCreatedEventGateway tokenCreatedEventGateway
     ) {
         this.authorizationTokenTTL = recoveryTokenTTL;
         this.credentialQueryGateway = credentialQueryGateway;
-        this.tokenCreatedEventEmitter = tokenCreatedEventEmitter;
+        this.tokenCreatedEventGateway = tokenCreatedEventGateway;
     }
 
     @Override
-    public Void execute(CreateTokenInput input) throws Exception {
+    public Void execute(CreateTokenInput input) {
 
-        try {
+        credentialQueryGateway
+                .findByEmail(input.getEmail())
+                .ifPresent((credential -> {
+                    Token token = JWTTokens.generateJwtToken(credential.getId().toString(), authorizationTokenTTL);
 
-            Credential credential = credentialQueryGateway.findByEmail(input.getEmail());
-
-            Token token = JWTTokens.generateJwtToken(credential.getId().toString(), authorizationTokenTTL);
-
-            tokenCreatedEventEmitter.send(token, credential.getEmail());
-
-        } catch (CredentialNotFoundException exception) {
-            exception.printStackTrace();
-        }
+                    tokenCreatedEventGateway.send(token, credential.getEmail());
+                }));
 
         return null;
     }

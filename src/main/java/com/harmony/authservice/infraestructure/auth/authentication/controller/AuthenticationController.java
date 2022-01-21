@@ -4,7 +4,7 @@ import com.harmony.authservice.app.usecase.auth.authentication.io.Authentication
 import com.harmony.authservice.app.usecase.auth.authentication.io.AuthenticationOutput;
 import com.harmony.authservice.app.usecase.UseCase;
 import com.harmony.authservice.domain.credential.model.Email;
-import com.harmony.authservice.domain.credential.model.Password;
+import com.harmony.authservice.domain.credential.model.RawPassword;
 import com.harmony.authservice.infraestructure.auth.authentication.controller.request.AuthenticationRequest;
 import com.harmony.authservice.infraestructure.auth.authentication.controller.response.AuthenticationResponse;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -40,7 +40,7 @@ public class AuthenticationController {
 
         AuthenticationOutput output = authenticationUseCase.execute(new AuthenticationInput(
                 new Email(request.getEmail()),
-                new Password(request.getRawPassword()))
+                new RawPassword(request.getRawPassword()))
         );
 
         String refreshAuthorizationToken = output

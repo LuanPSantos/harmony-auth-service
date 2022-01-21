@@ -1,7 +1,7 @@
 package com.harmony.authservice.app.domain.credential.model;
 
 import com.harmony.authservice.domain.credential.model.EncodedPassword;
-import com.harmony.authservice.domain.credential.model.Password;
+import com.harmony.authservice.domain.credential.model.RawPassword;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -10,41 +10,33 @@ public class PasswordTest {
 
     @Test
     void ShouldMatchRawPasswords() {
-        Password p1 = new Password("abc");
-        Password p2 = new Password("abc");
+        RawPassword p1 = new RawPassword("abc");
+        RawPassword p2 = new RawPassword("abc");
 
-        assertTrue(p1.matches(p2));
+        assertEquals(p1, p2);
     }
 
     @Test
     void ShouldNotMatchRawPasswords() {
-        Password p1 = new Password("abc");
-        Password p2 = new Password("adc");
+        RawPassword p1 = new RawPassword("abc");
+        RawPassword p2 = new RawPassword("adc");
 
-        assertFalse(p1.matches(p2));
+        assertNotEquals(p1, p2);
     }
 
     @Test
     void ShouldMatchRawPasswordAndEncodedPassword() {
-        Password p1 = EncodedPassword.fromRawPassword("abc");
-        Password p2 = new Password("abc");
+        RawPassword p2 = new RawPassword("abc");
+        EncodedPassword p1 = EncodedPassword.encodeRawPassword(p2);
 
         assertTrue(p1.matches(p2));
     }
 
     @Test
     void ShouldNotMatchRawPasswordAndEncodedPassword() {
-        Password p1 = new EncodedPassword("abc");
-        Password p2 = new Password("adc");
+        EncodedPassword p1 = new EncodedPassword("abc");
+        RawPassword p2 = new RawPassword("adc");
 
         assertFalse(p1.matches(p2));
-    }
-
-    @Test
-    void ShouldNotMatchEncodedPasswords() {
-        Password p1 = new EncodedPassword("abc");
-        Password p2 = new EncodedPassword("adc");
-
-        assertThrows(IllegalArgumentException.class, () -> p1.matches(p2));
     }
 }

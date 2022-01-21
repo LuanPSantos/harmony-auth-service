@@ -1,9 +1,9 @@
 package com.harmony.authservice.app.domain.credential.model;
 
-import com.harmony.authservice.domain.credential.exception.PasswordInvalidException;
 import com.harmony.authservice.domain.credential.model.Credential;
 import com.harmony.authservice.domain.credential.model.Email;
-import com.harmony.authservice.domain.credential.model.Password;
+import com.harmony.authservice.domain.credential.model.EncodedPassword;
+import com.harmony.authservice.domain.credential.model.RawPassword;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -44,9 +44,9 @@ public class CredentialTest {
                 .withEmail(EMAIL)
                 .withEncodedPassword(ENCODED_PASSWORD)
                 .withRole(ADMIN).build();
-        Password password = new Password("novasenha");
+        RawPassword password = new RawPassword("novasenha");
 
-        credential.updatePassword(password);
+        credential.updatePassword(EncodedPassword.encodeRawPassword(password));
 
         assertTrue(credential.getPassword().matches(password));
     }
@@ -61,29 +61,5 @@ public class CredentialTest {
         credential.updatePassword(null);
 
         assertTrue(credential.getPassword().matches(RAW_PASSWORD));
-    }
-
-    @Test
-    void ShouldSuccessfullyValidateTheCredential() throws PasswordInvalidException {
-        Credential credential = new Credential.Builder()
-                .withEmail(EMAIL)
-                .withEncodedPassword(ENCODED_PASSWORD)
-                .withRole(ADMIN).build();
-
-        credential.validate();
-
-        Assertions.assertTrue(true);
-    }
-
-    @Test
-    void ShouldFailureValidateTheCredential() {
-        Credential credential = new Credential.Builder()
-                .withEmail(EMAIL)
-                .withRawPassword(EMAIL.get())
-                .withRole(ADMIN).build();
-
-        PasswordInvalidException exception = assertThrows(PasswordInvalidException.class, credential::validate);
-
-        assertEquals(PasswordInvalidException.MESSAGE, exception.getMessage());
     }
 }

@@ -1,11 +1,10 @@
 package com.harmony.authservice.app.domain.auth.service;
 
-import com.harmony.authservice.app.utils.AuthorizationTestConstants;
 import com.harmony.authservice.domain.auth.exception.AuthenticationException;
 import com.harmony.authservice.domain.auth.model.JWTAuthorizationTokenPair;
 import com.harmony.authservice.domain.auth.service.AuthenticationService;
 import com.harmony.authservice.domain.credential.model.Credential;
-import com.harmony.authservice.domain.credential.model.Password;
+import com.harmony.authservice.domain.credential.model.RawPassword;
 import com.harmony.authservice.domain.credential.model.Role;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -47,7 +46,7 @@ public class AuthenticationServiceTest {
                 .withRole(Role.USER).build();
 
         AuthenticationException exception = assertThrows(AuthenticationException.class,
-                () -> authenticationService.authenticate(credential, new Password("wrongPassword")));
+                () -> authenticationService.authenticate(credential, new RawPassword("wrongPassword")));
 
         assertEquals(AuthenticationException.MESSAGE, exception.getMessage());
     }

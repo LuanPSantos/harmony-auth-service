@@ -24,7 +24,7 @@ public class AuthenticationUseCase implements UseCase<AuthenticationInput, Authe
     }
 
     @Override
-    public AuthenticationOutput execute(AuthenticationInput input) throws Exception {
+    public AuthenticationOutput execute(AuthenticationInput input) throws AuthenticationException {
 
         Credential credential = findCredentialByEmail(input.getEmail());
 
@@ -37,10 +37,8 @@ public class AuthenticationUseCase implements UseCase<AuthenticationInput, Authe
     }
 
     private Credential findCredentialByEmail(Email email) throws AuthenticationException {
-        try {
-            return credentialQueryGateway.findByEmail(email);
-        } catch (CredentialNotFoundException exception) {
-            throw new AuthenticationException();
-        }
+        return credentialQueryGateway
+                .findByEmail(email)
+                .orElseThrow(AuthenticationException::new);
     }
 }

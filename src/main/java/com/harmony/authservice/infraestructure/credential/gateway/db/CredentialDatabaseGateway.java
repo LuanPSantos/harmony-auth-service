@@ -7,6 +7,8 @@ import com.harmony.authservice.infraestructure.credential.gateway.db.repository.
 import com.harmony.authservice.infraestructure.credential.gateway.db.repository.CredentialRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class CredentialDatabaseGateway implements CredentialGateway {
 
@@ -31,17 +33,21 @@ public class CredentialDatabaseGateway implements CredentialGateway {
     }
 
     @Override
-    public Credential findByEmail(Email email) throws CredentialNotFoundException {
-        CredentialEntity entity = credentialRepository
-                .findByEmail(email.get())
-                .orElseThrow(CredentialNotFoundException::new);
+    public Optional<Credential> findByEmail(Email email) {
+        Optional<CredentialEntity> optional = credentialRepository.findByEmail(email.get());
 
-        return new Credential.Builder()
-                .withId(entity.getId())
-                .withEmail(entity.getEmail())
-                .withEncodedPassword(entity.getPassword())
-                .withRole(entity.getRole())
-                .build();
+        if (optional.isPresent()) {
+
+            return optional
+                    .map(entity -> new Credential.Builder()
+                            .withId(entity.getId())
+                            .withEmail(entity.getEmail())
+                            .withEncodedPassword(entity.getPassword())
+                            .withRole(entity.getRole())
+                            .build());
+        }
+
+        return Optional.empty();
     }
 
     @Override

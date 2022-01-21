@@ -4,7 +4,7 @@ import com.harmony.authservice.domain.auth.exception.AuthenticationException;
 import com.harmony.authservice.domain.auth.model.JWTAuthorizationTokenPair;
 import com.harmony.authservice.domain.auth.model.JWTAuthorization;
 import com.harmony.authservice.domain.credential.model.Credential;
-import com.harmony.authservice.domain.credential.model.Password;
+import com.harmony.authservice.domain.credential.model.RawPassword;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -16,15 +16,15 @@ public class AuthenticationService {
 
     public AuthenticationService(
             @Value("${auth.authorization-token.ttl}")
-            Long authorizationTokenTTL,
+                    Long authorizationTokenTTL,
             @Value("${auth.refresh-authorization-token.ttl}")
-            Long refreshAuthorizationTokenTTL
+                    Long refreshAuthorizationTokenTTL
     ) {
         this.authorizationTokenTimeToLive = authorizationTokenTTL;
         this.refreshAuthorizationTokenTimeToLive = refreshAuthorizationTokenTTL;
     }
 
-    public JWTAuthorizationTokenPair authenticate(Credential credential, Password rawPassword) throws Exception {
+    public JWTAuthorizationTokenPair authenticate(Credential credential, RawPassword rawPassword) throws AuthenticationException {
         if (credential.getPassword().matches(rawPassword)) {
             JWTAuthorization authorization = createAuthorizationFor(credential);
             JWTAuthorization refreshAuthorization = createRefreshAuthorizationFor(credential);

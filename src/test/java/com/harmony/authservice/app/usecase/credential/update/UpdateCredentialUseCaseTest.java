@@ -54,9 +54,12 @@ public class UpdateCredentialUseCaseTest {
                         .withRole(USER).build());
 
         UpdateCredentialOutput output = updateCredentialUseCase
-                .execute(new UpdateCredentialInput(new Credential.Builder()
-                        .withId(CREDENTIAL_ID)
-                        .withEmail(email).build(), RAW_PASSWORD));
+                .execute(new UpdateCredentialInput(
+                        RAW_PASSWORD,
+                        CREDENTIAL_ID,
+                        email,
+                        null
+                ));
 
         verify(saveCredentialGateway).save(any());
 
@@ -75,14 +78,14 @@ public class UpdateCredentialUseCaseTest {
 
     @Test
     void ShouldUpdateThePasswordOfCredential() throws Exception {
-        Password password = new Password("newPassword");
+        RawPassword password = new RawPassword("newPassword");
 
         ArgumentCaptor<Credential> captor = ArgumentCaptor.forClass(Credential.class);
         when(saveCredentialGateway.save(captor.capture()))
                 .thenReturn(new Credential.Builder()
                         .withId(CREDENTIAL_ID)
                         .withEmail(EMAIL)
-                        .withEncodedPassword(EncodedPassword.fromRawPassword(password.get()))
+                        .withEncodedPassword(EncodedPassword.encodeRawPassword(password))
                         .withRole(USER).build());
         when(credentialQueryGateway.findById(eq(CREDENTIAL_ID)))
                 .thenReturn(new Credential.Builder()
@@ -92,9 +95,11 @@ public class UpdateCredentialUseCaseTest {
                         .withRole(USER).build());
 
         UpdateCredentialOutput output = updateCredentialUseCase
-                .execute(new UpdateCredentialInput(new Credential.Builder()
-                        .withId(CREDENTIAL_ID)
-                        .withRawPassword(password).build(), RAW_PASSWORD));
+                .execute(new UpdateCredentialInput(
+                        RAW_PASSWORD,
+                        CREDENTIAL_ID,
+                        EMAIL,
+                        password));
 
         verify(saveCredentialGateway).save(any());
 
@@ -113,7 +118,7 @@ public class UpdateCredentialUseCaseTest {
 
     @Test
     void ShouldNotUpdateCredentialWhenCurrentPasswordIsWrong() throws Exception {
-        Password password = new Password("newPassword");
+        RawPassword password = new RawPassword("newPassword");
 
         when(credentialQueryGateway.findById(eq(CREDENTIAL_ID)))
                 .thenReturn(new Credential.Builder()
@@ -122,12 +127,9 @@ public class UpdateCredentialUseCaseTest {
                         .withEncodedPassword(ENCODED_PASSWORD)
                         .withRole(USER).build());
 
-        assertThrows(PasswordDidNotMatchException.class, () -> {
-            updateCredentialUseCase
-                    .execute(new UpdateCredentialInput(new Credential.Builder()
-                            .withId(CREDENTIAL_ID)
-                            .withRawPassword(password).build(), password));
-        });
+        assertThrows(PasswordDidNotMatchException.class, () ->
+                updateCredentialUseCase.execute(new UpdateCredentialInput(password, CREDENTIAL_ID, EMAIL, password))
+        );
 
         verify(saveCredentialGateway, times(0)).save(any());
     }
